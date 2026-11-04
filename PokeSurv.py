@@ -3,10 +3,13 @@ import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
+from Enemigo import Enemigo
 from Mundo import Mundo, MundoSprite        #Importarlo de esta manera evita un error de 'Modulo'
 
 #Inicialización de pygame
 pygame.init() 
+
+RELOJ = pygame.time.Clock()                                     #Tiempo del juego
 
 #Creación de ventana gráfica
 pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana
@@ -15,10 +18,9 @@ prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 
 #Creación de la función principal
 def main():
-    reloj = pygame.time.Clock()                                     #Tiempo del juego
     mi_Mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
-
+    malo = Enemigo(100, 50, 50, WIDTH//2, HEIGHT//2, "nada")
 
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
@@ -38,10 +40,12 @@ def main():
 
 
         mi_Mundo.dibujar_mundo(VENTANA)                             #Llamo a los métodos de las clases para dibujar en pantalla
-        prota.dibujar()                                   #EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
+        prota.dibujar()      
+        malo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
+        malo.dibujar(VENTANA)
 
         pygame.display.flip()           #Actualiza la pantalla
-        reloj.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
+        RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
 
 
 if __name__ =='__main__':               #Llamada al main() para ejecutar código principal
