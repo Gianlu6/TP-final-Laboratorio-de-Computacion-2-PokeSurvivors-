@@ -13,9 +13,6 @@ class Enemigo(Entidad):
         
     def atacar():
         pass
-    
-    def dibujar(self, VENTANA):
-        pygame.draw.circle(VENTANA, (255, 0, 0), (self.x, self.y), 50)
         
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()

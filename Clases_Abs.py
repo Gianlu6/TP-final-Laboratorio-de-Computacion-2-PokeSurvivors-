@@ -9,6 +9,7 @@ class Entidad(ABC):
         self.x = x
         self.y = y
         self.sprite = sprite
+        self.rect = self.sprite.get_rect(center=(x, y))
         self.estoy_vivo = True
 
     def dibujar(self):                     
