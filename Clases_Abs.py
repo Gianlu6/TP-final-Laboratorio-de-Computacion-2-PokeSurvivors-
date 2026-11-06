@@ -18,6 +18,7 @@ class Entidad(ABC):
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
         self.y += dy
+        self.rect.center = (self.x, self.y)
         
     @abstractmethod
     def atacar(self, vida_enemigo, defensa_enemigo):

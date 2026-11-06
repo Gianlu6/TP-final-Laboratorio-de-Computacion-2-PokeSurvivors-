@@ -1,5 +1,6 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
+import time
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
@@ -13,16 +14,23 @@ RELOJ = pygame.time.Clock()                                     #Tiempo del jueg
 
 #Creación de ventana gráfica
 pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana
+
+#INICIALIZANDO SPRITES
 prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
 prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
 malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
+proyectil_sprite_load = pygame.image.load("proyectil.png").convert_alpha()
+proyectil_sprite = pygame.transform.scale(proyectil_sprite_load, (30, 30))
 
 #Creación de la función principal
 def main():
-    mi_Mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
+    mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
-    malo = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
+    malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
+    malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
+
+    enemigos = [malo1, malo2]
 
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
@@ -41,11 +49,25 @@ def main():
             prota.moverse(0, VELOCIDAD_PERSONAJE)
 
 
-        mi_Mundo.dibujar_mundo(VENTANA)                             #Llamo a los métodos de las clases para dibujar en pantalla
+        mi_mundo.dibujar_mundo(VENTANA)
+        mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)
         prota.dibujar()      
-        malo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
-        malo.dibujar()
-
+       
+        for enemigo in enemigos:
+            enemigo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
+            enemigo.dibujar()
+            separar(malo1, malo2) #TEMPORAL HASTA QUE VEAMOS QUE ONDA
+            separar(prota, enemigo)
+                    
+            #chequea colisiones con enemigos y te hace daño
+            if prota.rect.colliderect(enemigo.rect):
+                prota.vida -= 3
+                
+        #TEMPORAL. Si moris se cierra el juego
+        if prota.vida <= 0:
+            break
+            
+       
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
 
