@@ -1,6 +1,5 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
-import time
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
@@ -20,8 +19,6 @@ prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
 prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
 malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
-proyectil_sprite_load = pygame.image.load("proyectil.png").convert_alpha()
-proyectil_sprite = pygame.transform.scale(proyectil_sprite_load, (30, 30))
 
 #Creación de la función principal
 def main():
@@ -48,7 +45,6 @@ def main():
         if tecla[pygame.K_DOWN]:
             prota.moverse(0, VELOCIDAD_PERSONAJE)
 
-
         mi_mundo.dibujar_mundo(VENTANA)
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)
         prota.dibujar()      
@@ -66,11 +62,9 @@ def main():
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-            
        
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
-
 
 if __name__ =='__main__':               #Llamada al main() para ejecutar código principal
     main()

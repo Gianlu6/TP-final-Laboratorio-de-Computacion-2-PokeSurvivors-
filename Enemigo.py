@@ -4,12 +4,15 @@ import pygame
 from constantes import *
 
 class Enemigo(Entidad):
+    cantidad = 0
+    
     def __init__(self, vida, ataque, defensa, x, y, sprite, velocidad=2, intervalo=1500):
         super().__init__(vida, ataque, defensa, x, y, sprite)
         self.velocidad = velocidad
         self.intervalo = intervalo
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)    
+        self.cantidad += 1
         
     def atacar():
         pass
