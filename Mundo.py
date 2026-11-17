@@ -28,3 +28,17 @@ class Mundo:                                #Clase mundo
         for elemento in self.elemento_fondo:                # Cada elemento en la lista generada, es una instancia de clase con el método dibujar_Sprite 
             elemento.dibujar_Sprite(pantalla)               # Llamo al método de cada instancia de clase
 
+class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara
+    def __init__(self):
+        super().__init__()
+        self.display.surface = pygame.display.get_surface()
+
+        #Offset de camara
+        self.offset = pygame.math.Vector2()
+        self.mitad_ancho = self.display_surface.get_size()[0] //2
+        self.mitad.alto = self.display_surface.get_size()[1] //2
+
+
+    def camara_centrada(self,target):
+        self.offset.x = target.rect.center.x - self.mitad_ancho
+        self.offset.y = target.rect.center.y - self.mitad_alto

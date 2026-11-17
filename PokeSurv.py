@@ -6,6 +6,7 @@ from constantes import *                           #Librerías propias
 from Personaje import Personaje
 from Enemigo import Enemigo
 from Mundo import Mundo, MundoSprite        #Importarlo de esta manera evita un error de 'Modulo'
+from Llamada_Api import obtenerPikachu
 
 #Inicialización de pygame
 pygame.init() 
@@ -13,25 +14,32 @@ pygame.init()
 RELOJ = pygame.time.Clock()                                     #Tiempo del juego
 
 #Creación de ventana gráfica
-pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana
+pantalla = pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana
 
 #INICIALIZANDO SPRITES
-prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
+prota_sprite_load = pygame.image.load(obtenerPikachu()).convert_alpha()
 prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
 malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
 proyectil_sprite_load = pygame.image.load("proyectil.png").convert_alpha()
 proyectil_sprite = pygame.transform.scale(proyectil_sprite_load, (30, 30))
 
+# Seteo de camara
+camara_grupo = pygame.sprite.Group() #Grupo de sprites para dibujar en simultáneo
+
+
+
+mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
+prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
+malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
+malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
+
+enemigos = [malo1, malo2]
+
+
+
 #Creación de la función principal
 def main():
-    mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
-    malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
-    malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
-
-    enemigos = [malo1, malo2]
-
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
            if event.type == pygame.QUIT: 
