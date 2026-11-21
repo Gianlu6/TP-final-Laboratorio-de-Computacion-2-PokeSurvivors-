@@ -44,6 +44,6 @@ def spawneo_enemigos():
     ahora = pygame.time.get_ticks()
     x = random.choice([0, WIDTH])
     y = random.randint(0, HEIGHT)
-    if len(enemigos) < 7 and ahora - ultimo_spawn >= 2000:
+    if len(enemigos) < 8 and ahora - ultimo_spawn >= 2000:
         ultimo_spawn = ahora
         enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite))

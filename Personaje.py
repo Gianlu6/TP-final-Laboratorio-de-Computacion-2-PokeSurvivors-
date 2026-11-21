@@ -4,6 +4,7 @@ from Clases_Abs import Entidad
 class Personaje(Entidad):
     def __init__(self, vida, daño, defensa, x, y, sprite, rango, ataques):
         super().__init__(vida, daño, defensa, x, y, sprite)
+        self.vida_maxima = 100
         self.rango = rango
         self.ataques = ataques
         

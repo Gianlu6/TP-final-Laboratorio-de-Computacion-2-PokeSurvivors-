@@ -22,7 +22,7 @@ class Mundo:                                #Clase mundo
         #Lista de clases mundoSprite con ubicaciones random dentro de el límite de la pantalla
     
     def dibujar_mundo (self, pantalla):                 
-        pantalla.fill(VERDE)                     # Dibujar el mundo (color de fondo de relleno)
+        pantalla.fill(VERDE_OSCURO)                     # Dibujar el mundo (color de fondo de relleno)
         for elemento in self.elemento_fondo:                # Cada elemento en la lista generada, es una instancia de clase con el método dibujar_Sprite 
             elemento.dibujar_Sprite(pantalla)               # Llamo al método de cada instancia de clase
 

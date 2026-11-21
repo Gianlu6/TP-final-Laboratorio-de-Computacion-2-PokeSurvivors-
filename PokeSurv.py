@@ -6,6 +6,7 @@ from Personaje import Personaje
 from Enemigo import *
 from Mundo import Mundo, MundoSprite        #Importarlo de esta manera evita un error de 'Modulo'
 from PokeAtaque import *
+from BarraVida import *
 
 #Inicialización de pygame
 pygame.init() 
@@ -30,6 +31,7 @@ proyectiles = []
 def main():
     mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
+    barra_prota = BarraVida(100, 600, 300, 50, prota.vida_maxima)
 
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
@@ -62,6 +64,8 @@ def main():
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida -= 3
                 
+        barra_prota.dibujar(VENTANA, prota.vida)
+
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
