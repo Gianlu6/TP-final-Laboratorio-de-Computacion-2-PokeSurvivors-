@@ -1,6 +1,7 @@
 #Resolución
 import pygame
 import math
+from itertools import combinations
 
 pygame.font.init()
 
@@ -10,6 +11,7 @@ VELOCIDAD_PERSONAJE = 3.50
 #Colores Básico (Tupla de valores RGB 8 bits, 0-255)
 AZUL = (0,0,255)
 ROJO = (255,0,0)
+VERDE_OSCURO = (69, 139, 0)
 VERDE = (0,255,0)
 BLANCO = (255,255,255)
 NEGRO = (0,0,0)
@@ -17,6 +19,8 @@ AMARILLO = (255,255,0)
 
 VENTANA = pygame.display.set_mode((WIDTH, HEIGHT))
 FUENTE = pygame.font.SysFont("Arial", 30)
+
+
 
 def mostrar_texto(texto, fuente, color, x, y):
     img = fuente.render(texto, True, color)
@@ -52,3 +56,8 @@ def separar(entidad_a, entidad_b):
             
     entidad_a.rect.center = (entidad_a.x, entidad_a.y)
     entidad_b.rect.center = (entidad_b.x, entidad_b.y)
+    
+#con combinations, creas todas las combinaciones posibles de dos unidades y llamas separar con cada una
+def separar_todos(entidades):
+    for a, b in combinations(entidades, 2):
+        separar(a, b)

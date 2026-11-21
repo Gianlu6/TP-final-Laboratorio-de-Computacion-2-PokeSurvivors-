@@ -2,6 +2,8 @@ import math
 from Clases_Abs import Entidad
 import pygame
 from constantes import *
+from sprites import *
+import random
 
 class Enemigo(Entidad):
     def __init__(self, vida, ataque, defensa, x, y, image, grupo, velocidad=2):
@@ -10,6 +12,7 @@ class Enemigo(Entidad):
         self.intervalo = 500
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)    
+        #self.cantidad += 1
         
     def atacar():
         pass
@@ -30,4 +33,14 @@ class Enemigo(Entidad):
         if distancia > self.velocidad:
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
 
-        
+enemigos = []
+ultimo_spawn = 0
+
+def spawneo_enemigos():
+    global ultimo_spawn
+    ahora = pygame.time.get_ticks()
+    x = random.choice([0, WIDTH])
+    y = random.randint(0, HEIGHT)
+    if len(enemigos) < 8 and ahora - ultimo_spawn >= 2000:
+        ultimo_spawn = ahora
+        enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite))

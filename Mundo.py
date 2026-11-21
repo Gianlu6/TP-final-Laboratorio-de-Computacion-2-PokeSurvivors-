@@ -31,10 +31,6 @@ class Mundo:                                #Clase mundo (en desuso)
         #Exprecion generadora de 10 elementos Sprites en ubicacion random dentro del rango de la pantalla
         #Lista de clases mundoSprite con ubicaciones random dentro de el límite de la pantalla
     
-    def dibujar_mundo (self, pantalla):                 
-        pantalla.fill(VERDE)                     # Dibujar el mundo (color de fondo de relleno)
-        for elemento in self.elemento_fondo:                # Cada elemento en la lista generada, es una instancia de clase con el método dibujar_Sprite 
-            elemento.dibujar_Sprite(pantalla)               # Llamo al método de cada instancia de clase
 
 
 class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara

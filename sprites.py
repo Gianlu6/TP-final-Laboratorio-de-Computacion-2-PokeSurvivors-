@@ -1,0 +1,9 @@
+import pygame
+    
+prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
+prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
+malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
+malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
+
+rayo_sprite_load = pygame.image.load("rayo.png").convert_alpha()
+rayo_sprite = pygame.transform.scale(rayo_sprite_load, (100, 100))

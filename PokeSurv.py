@@ -1,12 +1,12 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
-import time
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
-from Enemigo import Enemigo
+from Enemigo import *
 from Mundo import *        #Importarlo de esta manera evita un error de 'Modulo'
-from Llamada_Api import obtenerPikachu
+from PokeAtaque import *
+from BarraVida import *
 
 #Inicialización de pygame
 pygame.init() 
@@ -26,14 +26,17 @@ prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
 prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
 malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
-proyectil_sprite_load = pygame.image.load("proyectil.png").convert_alpha()
-proyectil_sprite = pygame.transform.scale(proyectil_sprite_load, (30, 30))
+
+rayo_sprite_load = pygame.image.load("rayo.png").convert_alpha()
+rayo_sprite = pygame.transform.scale(rayo_sprite_load, (100, 100))
+
+proyectiles = []
 
 mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo)    #Instancia de personaje(Doble barra es división forzada a entero)
+prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
 malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite,camara_grupo)
 malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite,camara_grupo)
-
+barra_prota = BarraVida(100, 600, 300, 50, prota.vida_maxima)
 enemigos = [malo1, malo2]
 
 
@@ -68,6 +71,8 @@ def main():
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida -= 3
                 
+        
+
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
@@ -75,15 +80,16 @@ def main():
           
         camara_grupo.update()
         
-        VENTANA.fill((VERDE))                       #Color de Fondo 
+        VENTANA.fill((VERDE_OSCURO))                       #Color de Fondo 
         camara_grupo.camara_centrada(prota)         #Grupo
+
+        barra_prota.dibujar(VENTANA, prota.vida)
 
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)            #Muestra texto de la vida
                
 
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
-
 
 if __name__ =='__main__':               #Llamada al main() para ejecutar código principal
     main()
