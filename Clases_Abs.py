@@ -1,19 +1,20 @@
 from abc import ABC, abstractmethod
 from constantes import *
 
-class Entidad(ABC):
-    def __init__(self, vida, ataque, defensa, x, y, sprite):    # x, y -> Coordenadas de posición
+class Entidad(pygame.sprite.Sprite, ABC):
+    def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
+        super().__init__(grupo)         #Pygame
         self.vida = vida
         self.ataque = ataque
         self.defensa = defensa
         self.x = x
         self.y = y
-        self.sprite = sprite
-        self.rect = self.sprite.get_rect(center=(x, y))
         self.estoy_vivo = True
 
-    def dibujar(self):                     
-       VENTANA.blit(self.sprite, (self.x, self.y))
+        #Atributos específicos de la clase tipo pygame Sprite:
+        self.image = sprite
+        self.rect = self.image.get_rect (center=(x,y))
+
 
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx

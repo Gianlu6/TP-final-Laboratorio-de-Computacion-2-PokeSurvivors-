@@ -25,7 +25,6 @@ def mostrar_texto(texto, fuente, color, x, y):
 def separar(entidad_a, entidad_b):   
     if not entidad_a.rect.colliderect(entidad_b.rect):
         return #si no hay colision no hace nada
-    
     #donde se superpone cada eje
     overlap_x = min(entidad_a.rect.right, entidad_b.rect.right) - max(entidad_a.rect.left, entidad_b.rect.left)
     overlap_y = min(entidad_a.rect.bottom, entidad_b.rect.bottom) - max(entidad_a.rect.top, entidad_b.rect.top)
