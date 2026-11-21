@@ -2,7 +2,8 @@ import math
 from Clases_Abs import Entidad
 import pygame
 from constantes import *
-from PokeSurv import malo_sprite
+from sprites import *
+import random
 
 class Enemigo(Entidad):
     cantidad = 0
@@ -36,15 +37,13 @@ class Enemigo(Entidad):
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
 
 enemigos = []
+ultimo_spawn = 0
 
-def generador_enemigos():
-    ahora = pygame.time.get_ticks()
-    ultimo_chequeo = 0
-    
-    if len(enemigos) < 7:
-        if ahora - ultimo_chequeo >= 2000:
-            ultimo_chequeo = ahora 
-            yield Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
- 
 def spawneo_enemigos():
-              
+    global ultimo_spawn
+    ahora = pygame.time.get_ticks()
+    x = random.choice([0, WIDTH])
+    y = random.randint(0, HEIGHT)
+    if len(enemigos) < 7 and ahora - ultimo_spawn >= 2000:
+        ultimo_spawn = ahora
+        enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite))

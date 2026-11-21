@@ -1,11 +1,11 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
 
-from PokeAtaque import *
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
-from Enemigo import Enemigo
+from Enemigo import *
 from Mundo import Mundo, MundoSprite        #Importarlo de esta manera evita un error de 'Modulo'
+from PokeAtaque import *
 
 #Inicialización de pygame
 pygame.init() 
@@ -30,10 +30,6 @@ proyectiles = []
 def main():
     mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
-    malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
-    malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
-
-    enemigos = [malo1, malo2]
 
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
@@ -54,11 +50,11 @@ def main():
         mi_mundo.dibujar_mundo(VENTANA)
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)
         prota.dibujar()      
+        spawneo_enemigos()
        
         for enemigo in enemigos:
             enemigo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
             enemigo.dibujar()
-            separar(malo1, malo2) #TEMPORAL HASTA QUE VEAMOS QUE ONDA
             separar(prota, enemigo)
             
             #chequea colisiones con enemigos y te hace daño

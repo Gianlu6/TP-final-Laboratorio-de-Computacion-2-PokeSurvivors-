@@ -2,7 +2,7 @@ import pygame
 import random
 from constantes import *
 
-class MundoSprite:                              #Clase que genera elementos en el mundo
+class MundoSprite:    #Clase que genera elementos en el mundo
     def __init__(self, x, y):
         self.x = x
         self.y = y

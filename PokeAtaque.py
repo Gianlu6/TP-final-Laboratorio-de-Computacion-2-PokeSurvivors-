@@ -1,7 +1,6 @@
 import math
 import pygame
-from PokeSurv import rayo_sprite
-
+from sprites import *
 # ---------- PROYECTILES ----------
 class Proyectil:
     """Base: vuela en línea recta hacia un punto."""
