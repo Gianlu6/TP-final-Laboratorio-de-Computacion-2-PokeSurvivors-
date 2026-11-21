@@ -2,7 +2,6 @@ import pygame
 import random
 from constantes import *
 
-
 class MundoSprite:                              #Clase que genera elementos en el mundo
     def __init__(self, x, y):
         self.x = x
@@ -12,7 +11,6 @@ class MundoSprite:                              #Clase que genera elementos en e
     def dibujar_Sprite(self, pantalla):         #Método para dibujarlos como un rectanngulo azul
         pygame.draw.rect(pantalla, AZUL, 
                          (self.x, self.y, self.tamanio, self.tamanio))
-
 
 class Mundo:                                #Clase mundo
     def __init__(self, ancho, alto):

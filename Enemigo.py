@@ -2,12 +2,13 @@ import math
 from Clases_Abs import Entidad
 import pygame
 from constantes import *
+from PokeSurv import malo_sprite
 
 class Enemigo(Entidad):
     cantidad = 0
     
-    def __init__(self, vida, ataque, defensa, x, y, sprite, velocidad=2, intervalo=1500):
-        super().__init__(vida, ataque, defensa, x, y, sprite)
+    def __init__(self, vida, daño, defensa, x, y, sprite, velocidad=2, intervalo=1500):
+        super().__init__(vida, daño, defensa, x, y, sprite)
         self.velocidad = velocidad
         self.intervalo = intervalo
         self.ultimo_chequeo = 0
@@ -33,4 +34,17 @@ class Enemigo(Entidad):
         #chequea si la distancia es mayor a la velocidad para ir asi no hay mov raros
         if distancia > self.velocidad:
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
-        
+
+enemigos = []
+
+def generador_enemigos():
+    ahora = pygame.time.get_ticks()
+    ultimo_chequeo = 0
+    
+    if len(enemigos) < 7:
+        if ahora - ultimo_chequeo >= 2000:
+            ultimo_chequeo = ahora 
+            yield Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
+ 
+def spawneo_enemigos():
+              

@@ -1,6 +1,7 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
 
+from PokeAtaque import *
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
 from Enemigo import Enemigo
@@ -20,10 +21,15 @@ prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
 malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
 
+rayo_sprite_load = pygame.image.load("rayo.png").convert_alpha()
+rayo_sprite = pygame.transform.scale(rayo_sprite_load, (100, 100))
+
+proyectiles = []
+
 #Creación de la función principal
 def main():
     mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
+    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
     malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
     malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
 
@@ -54,7 +60,7 @@ def main():
             enemigo.dibujar()
             separar(malo1, malo2) #TEMPORAL HASTA QUE VEAMOS QUE ONDA
             separar(prota, enemigo)
-                    
+            
             #chequea colisiones con enemigos y te hace daño
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida -= 3
@@ -62,6 +68,9 @@ def main():
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
+        
+        #PARA SPAWNEAR ENEMIGOS
+        #Ir spawneandolos mediado un generador
        
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
