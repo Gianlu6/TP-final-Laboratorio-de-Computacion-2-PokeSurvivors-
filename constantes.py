@@ -1,6 +1,7 @@
 #Resolución
 import pygame
 import math
+from itertools import combinations
 
 pygame.font.init()
 
@@ -53,3 +54,8 @@ def separar(entidad_a, entidad_b):
             
     entidad_a.rect.center = (entidad_a.x, entidad_a.y)
     entidad_b.rect.center = (entidad_b.x, entidad_b.y)
+    
+#con combinations, creas todas las combinaciones posibles de dos unidades y llamas separar con cada una
+def separar_todos(entidades):
+    for a, b in combinations(entidades, 2):
+        separar(a, b)

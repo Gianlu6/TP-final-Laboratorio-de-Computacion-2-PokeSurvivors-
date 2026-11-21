@@ -51,11 +51,12 @@ def main():
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)
         prota.dibujar()      
         spawneo_enemigos()
+        entidades = [prota] + enemigos
        
         for enemigo in enemigos:
             enemigo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
             enemigo.dibujar()
-            separar(prota, enemigo)
+            separar_todos(entidades)
             
             #chequea colisiones con enemigos y te hace daño
             if prota.rect.colliderect(enemigo.rect):
