@@ -3,10 +3,12 @@ import pygame
 import math
 from itertools import combinations
 
+
 pygame.font.init()
 
 WIDTH, HEIGHT = 1080, 720    
 VELOCIDAD_PERSONAJE = 3.50
+
 
 #Colores Básico (Tupla de valores RGB 8 bits, 0-255)
 AZUL = (0,0,255)

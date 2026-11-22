@@ -19,7 +19,6 @@ pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto
 #Set camara
 camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
 
-
 #INICIALIZANDO SPRITES
 #prota_sprite_load = pygame.image.load(obtenerPikachu()).convert_alpha()        #PROXIMAMENTE: obtencion de datos de la API
 prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
@@ -60,6 +59,9 @@ def main():
         if tecla[pygame.K_DOWN]:
             prota.moverse(0, VELOCIDAD_PERSONAJE)
       
+        
+        
+        
        
         for enemigo in enemigos:
             enemigo.avanzar(prota) #EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
@@ -70,13 +72,13 @@ def main():
             #chequea colisiones con enemigos y te hace daño
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida -= 1
-                
+
+        spawneo_enemigos(camara_grupo)
         
 
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-
           
         camara_grupo.update()
         
