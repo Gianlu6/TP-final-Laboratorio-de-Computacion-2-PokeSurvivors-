@@ -73,7 +73,7 @@ def main():
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida -= 1
 
-        spawneo_enemigos(camara_grupo)
+        spawneo_enemigos(prota,camara_grupo)
         
 
         #TEMPORAL. Si moris se cierra el juego

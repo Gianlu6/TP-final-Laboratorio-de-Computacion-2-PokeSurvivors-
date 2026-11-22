@@ -6,7 +6,6 @@ from sprites import *
 import random
 
 
-
 class Enemigo(Entidad):
     def __init__(self, vida, ataque, defensa, x, y, image, grupo, velocidad=2):
         super().__init__(vida, ataque, defensa, x, y, image, grupo)
@@ -39,7 +38,7 @@ class Enemigo(Entidad):
 enemigo_spawned = []
 ultimo_spawn = 0
 
-def spawneo_enemigos(grupo):
+def spawneo_enemigos(personaje, grupo):
     global ultimo_spawn
     ahora = pygame.time.get_ticks()
     x = random.choice([0, WIDTH])
@@ -47,3 +46,7 @@ def spawneo_enemigos(grupo):
     if len(enemigo_spawned) < 8 and ahora - ultimo_spawn >= 2000:
         ultimo_spawn = ahora
         enemigo_spawned.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
+
+    for enemigo in enemigo_spawned:
+        enemigo.avanzar(personaje)
+        separar_todos(enemigo_spawned)
