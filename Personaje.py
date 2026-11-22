@@ -8,15 +8,23 @@ class Personaje(Entidad):
         self.rango = rango
         self.ataques = ataque
 
+    
+
+    #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
+    #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
+    
     #El getter de vida se llama asi:
-    #prota.vida
-    @property
+        #prota.vida 
+    @property                   
     def vida(self):
         return self.__vida
 
+    #El decorador .setter toma el nombre del atributo privado y cuando lo llamas 
+    # para editarlo como un atributo normal, en realidad pasa por el método setter validador
+
     #El setter de vida se llama asi:
     # prota.vida = danio
-    @vida.setter                     
+    @vida.setter                                  
     def vida(self, danio):
         if danio >= self.__vida:
             self.__vida = 0

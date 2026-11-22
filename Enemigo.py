@@ -35,19 +35,33 @@ class Enemigo(Entidad):
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
 
 
-enemigo_spawned = []
+#enemigo_spawned = []
 ultimo_spawn = 0
 
+# def spawneo_enemigos(personaje, grupo):
+#     global ultimo_spawn
+#     ahora = pygame.time.get_ticks()
+#     x = random.choice([0, WIDTH])
+#     y = random.randint(0, HEIGHT)
+#     if len(enemigo_spawned) < 8 and ahora - ultimo_spawn >= 2000:
+#         ultimo_spawn = ahora
+#         enemigo_spawned.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
+
+#     for enemigo in enemigo_spawned:
+#         enemigo.avanzar(personaje)
+#         separar_todos(enemigo_spawned)
+
+enemigos = []
 def spawneo_enemigos(personaje, grupo):
     global ultimo_spawn
     ahora = pygame.time.get_ticks()
     x = random.choice([0, WIDTH])
-    y = random.randint(0, HEIGHT)
-    if len(enemigo_spawned) < 8 and ahora - ultimo_spawn >= 2000:
+    y = random.randint(0, HEIGHT)   
+    if len (enemigos) < 8 and ahora - ultimo_spawn >= 2000:
         ultimo_spawn = ahora
-        enemigo_spawned.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
+        enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
 
-    for enemigo in enemigo_spawned:
+    for enemigo in enemigos:
         enemigo.avanzar(personaje)
-        separar_todos(enemigo_spawned)
-    
+        separar(enemigo,personaje)
+    separar_todos(enemigos)
