@@ -35,7 +35,7 @@ mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)           #Instancia de clase Mundo
 prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
 malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite,camara_grupo)
 malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite,camara_grupo)
-barra_prota = BarraVida(100, 600, 300, 50, prota.vida_maxima)
+barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
 enemigos = [malo1, malo2]
 
 
@@ -71,7 +71,7 @@ def main():
                     
             #chequea colisiones con enemigos y te hace daño
             if prota.rect.colliderect(enemigo.rect):
-                prota.vida -= 1
+                prota.vida = 1
 
         spawneo_enemigos(prota,camara_grupo)
         

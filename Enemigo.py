@@ -50,3 +50,4 @@ def spawneo_enemigos(personaje, grupo):
     for enemigo in enemigo_spawned:
         enemigo.avanzar(personaje)
         separar_todos(enemigo_spawned)
+    

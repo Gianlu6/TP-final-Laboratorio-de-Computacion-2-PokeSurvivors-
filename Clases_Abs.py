@@ -4,7 +4,7 @@ from constantes import *
 class Entidad(pygame.sprite.Sprite, ABC):
     def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
         super().__init__(grupo)         #Pygame
-        self.vida = vida
+        self.__vida = vida
         self.ataque = ataque
         self.defensa = defensa
         self.x = x
