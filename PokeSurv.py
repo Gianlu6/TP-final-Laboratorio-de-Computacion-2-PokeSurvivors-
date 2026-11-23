@@ -5,7 +5,7 @@ from constantes import *                           #Librerías propias
 from Personaje import Personaje
 from Enemigo import *
 from Mundo import *        #Importarlo de esta manera evita un error de 'Modulo'
-from PokeAtaque import *
+from Ataque import *
 from BarraVida import *
 from sprites import *
 

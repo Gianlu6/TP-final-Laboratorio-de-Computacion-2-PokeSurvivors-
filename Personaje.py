@@ -1,4 +1,4 @@
-from PokeAtaque import *
+from Ataque import *
 from Clases_Abs import Entidad
 
 class Personaje(Entidad):

@@ -27,3 +27,26 @@ class Entidad(pygame.sprite.Sprite, ABC):
    
     def buscar_pos(self, Ent_Enemiga):
         return (Ent_Enemiga.x, Ent_Enemiga.y)
+
+
+
+#Base de ataques?
+#Rayo: Tiene mas daño que impactrueno
+#Impactrueno: rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
+#Cola férrea, ataque normal para los de tierra (látigo de VS)
+#Placaje: Ataque normal, daño de contacto
+#Placaje eléctrico: Ataque eléctrico, daño de contacto (mas daño que rayo, deja estela de daño?)
+#Electro tela/red: escudo electrico (ajo VS)
+#Bola voltio
+#Proyectiles?
+
+#Enemigo. Ataques segun tipo (daño de contacto y proyectiles):
+#Fuego y agua: proyectiles, fuego hace mas daño, agua lanza mas proyectiles
+#Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
+#Tierra: daño de contacto o area con terremotos
+
+
+
+class Ataque (pygame.sprite.Sprite, ABC):
+    def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo):
+        super().__init__(grupo)
