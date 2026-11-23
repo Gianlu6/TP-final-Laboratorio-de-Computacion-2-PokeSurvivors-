@@ -1,12 +1,22 @@
 from Ataque import *
 from Clases_Abs import Entidad
+from Llamada_Api import *
 
 class Personaje(Entidad):
-    def __init__(self, vida, ataque, defensa, x, y, image, grupo, rango, ataques):
+    def __init__(self, vida, ataque, defensa, x, y, image, grupo, rango):
         super().__init__(vida, ataque, defensa, x, y, image, grupo)
         self.__vida = vida
         self.rango = rango
-        self.ataques = ataque
+
+        prota_sprite_load = pygame.image.load(obtenerPikachu()).convert_alpha()        #PROXIMAMENTE: obtencion de datos de la API
+        #prota_sprite_load = pygame.image.load("rayo.png").convert_alpha()
+        self.image = pygame.transform.scale(prota_sprite_load, (100, 100))
+        
+        
+        
+        self.rect = self.rect.inflate(-50, -50)
+        self.rect.center = (x,y)
+        
 
     
 

@@ -14,12 +14,13 @@ class Entidad(pygame.sprite.Sprite, ABC):
         #Atributos específicos de la clase tipo pygame Sprite:
         self.image = sprite
         self.rect = self.image.get_rect (center=(x,y))
-
+        
 
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
         self.y += dy
         self.rect.center = (self.x, self.y)
+        
         
     @abstractmethod
     def atacar(self, vida_enemigo, defensa_enemigo):
@@ -37,8 +38,12 @@ class Entidad(pygame.sprite.Sprite, ABC):
 #Placaje: Ataque normal, daño de contacto
 #Placaje eléctrico: Ataque eléctrico, daño de contacto (mas daño que rayo, deja estela de daño?)
 #Electro tela/red: escudo electrico (ajo VS)
-#Bola voltio
+#Bola voltio: Protectil? Varita de fuego? El ataque sube en base a la velocidad
+#Mega-punch, headbutt: Normales
+#Volt Switch: Eléctrico. Pega y cambia, poco daño
 #Proyectiles?
+
+#Modificadores pasivos para evolucion
 
 #Enemigo. Ataques segun tipo (daño de contacto y proyectiles):
 #Fuego y agua: proyectiles, fuego hace mas daño, agua lanza mas proyectiles
@@ -50,3 +55,13 @@ class Entidad(pygame.sprite.Sprite, ABC):
 class Ataque (pygame.sprite.Sprite, ABC):
     def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo):
         super().__init__(grupo)
+        self.ataque = ataque
+        self.velocidad_ataque = velocidad_ataque
+        self.area = area
+        self.cantidad = cantidad
+
+    def moverse():
+        pass
+
+    def daniar():
+        pass

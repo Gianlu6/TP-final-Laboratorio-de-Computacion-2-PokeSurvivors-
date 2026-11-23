@@ -22,8 +22,8 @@ camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "cama
 
 proyectiles = []
 
-mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300, ataques=[Lanzarayos])    #Instancia de personaje(Doble barra es división forzada a entero)
+mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
+prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300)    #Instancia de personaje(Doble barra es división forzada a entero)
 barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
 
 #Creación de la función principal
@@ -66,7 +66,7 @@ def main():
         barra_prota.dibujar(VENTANA, prota.vida)
 
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)            #Muestra texto de la vida
-               
+
 
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
