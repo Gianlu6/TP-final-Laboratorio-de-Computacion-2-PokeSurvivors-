@@ -12,7 +12,8 @@ class Enemigo(Entidad):
         self.velocidad = velocidad
         self.intervalo = 500
         self.ultimo_chequeo = 0
-        self.objetivo = (x, y)    
+        self.objetivo = (x, y)
+        self.vida = vida    
         #self.cantidad += 1
         
     def atacar():
@@ -20,6 +21,7 @@ class Enemigo(Entidad):
         
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()
+        
         #cada intervalo actualiza el objetivo
         if ahora - self.ultimo_chequeo >= self.intervalo:
             self.objetivo = self.buscar_pos(Personaje)

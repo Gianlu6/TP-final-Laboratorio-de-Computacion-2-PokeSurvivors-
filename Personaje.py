@@ -1,21 +1,20 @@
 from Ataque import *
 from Clases_Abs import Entidad
-from Llamada_Api import *
+from Enemigo import *
+from sprites import *
 
 class Personaje(Entidad):
     def __init__(self, vida, ataque, defensa, x, y, image, grupo, rango):
         super().__init__(vida, ataque, defensa, x, y, image, grupo)
         self.__vida = vida
         self.rango = rango
-
-        prota_sprite_load = pygame.image.load(obtenerPikachu()).convert_alpha()        #PROXIMAMENTE: obtencion de datos de la API
-        #prota_sprite_load = pygame.image.load("rayo.png").convert_alpha()
-        self.image = pygame.transform.scale(prota_sprite_load, (100, 100))
-        
-        
-        
+        self.ataque = ataque
+        self.grupo = grupo
         self.rect = self.rect.inflate(-50, -50)
         self.rect.center = (x,y)
+
+
+        self.contador = 0 #PROYECTILES
         
 
     
@@ -41,9 +40,16 @@ class Personaje(Entidad):
         else:
             self.__vida -= danio
         
-    def atacar(self, posicion_enemigo, indice=0):
-        return self.ataques[indice].lanzar(self, posicion_enemigo)
-    
+    def atacar(self,ene):
+        #Podria se una lista que recorra las instancias de ataques que usan de método común atacar
+        self.contador+=1
+
+        if self.contador < 30 or not ene:
+            return None
+        else:
+            self.contador = 0
+            pos_x,pos_y = self.buscar_pos(ene[0])
+            return Proyectil(1,0,rayo_sprite,self.x, self.y, pos_x, pos_y, self.ataque, self.grupo)
     #el personaje recibe un diccionario con todos los enemigos presentes como claves y 
     #sus posiciones relativas al personaje como valores y quien tenga la menor de ellas
     #sera al que ataque.

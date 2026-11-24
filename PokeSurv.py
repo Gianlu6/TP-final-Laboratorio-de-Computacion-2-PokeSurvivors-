@@ -20,11 +20,13 @@ pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto
 #Set camara
 camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
 
-proyectiles = []
+
 
 mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
 prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300)    #Instancia de personaje(Doble barra es división forzada a entero)
 barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
+proyectiles = []
+
 
 #Creación de la función principal
 def main():
@@ -52,21 +54,35 @@ def main():
         for enemigo in enemigos:
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida = 1
+
+        disparo= prota.atacar(enemigos)
+        if disparo is not None:
+            proyectiles.append(disparo)
+
+        camara_grupo.update()
         
+        VENTANA.fill((VERDE_OSCURO))                       #Color de Fondo 
+        camara_grupo.camara_centrada(prota)                #Grupo
+
+        for p in proyectiles:
+            p.avanzar()
+            for enemigo in enemigos:
+                if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
+                    enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
+                if enemigo.vida <=0:
+                    enemigo.estoy_vivo = False
+
+        # Limpiar proyectiles y enemigos muertos
+        proyectiles[:] = [p for p in proyectiles if p.estoy_vivo]
+        enemigos[:] = [e for e in enemigos if e.estoy_vivo]      
+
 
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-          
-        camara_grupo.update()
-        
-        VENTANA.fill((VERDE_OSCURO))                       #Color de Fondo 
-        camara_grupo.camara_centrada(prota)         #Grupo
 
         barra_prota.dibujar(VENTANA, prota.vida)
-
         mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)            #Muestra texto de la vida
-
 
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"

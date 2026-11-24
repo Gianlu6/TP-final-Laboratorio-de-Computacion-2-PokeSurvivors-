@@ -53,15 +53,19 @@ class Entidad(pygame.sprite.Sprite, ABC):
 
 
 class Ataque (pygame.sprite.Sprite, ABC):
-    def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo):
+    def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo, x, y):
         super().__init__(grupo)
         self.ataque = ataque
         self.velocidad_ataque = velocidad_ataque
         self.area = area
         self.cantidad = cantidad
+        self.x = x
+        self.y = y
+        self.estoy_vivo = True
 
     def moverse():
         pass
 
-    def daniar():
+    @abstractmethod
+    def atacar():
         pass

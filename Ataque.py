@@ -1,61 +1,33 @@
 import math
 import pygame
 from sprites import *
+from Clases_Abs import *
+from constantes import *
+
 # ---------- PROYECTILES ----------
-class Proyectil:
-    """Base: vuela en línea recta hacia un punto."""
-    def __init__(self, velocidad, sprite, x, y, objetivo, daño):
-        self.velocidad = velocidad
-        self.sprite = sprite
-        self.x, self.y = x, y
-        self.objetivo = objetivo
-        self.daño = daño
-        self.activo = True
-        self.rect = sprite.get_rect(center=(x, y))
+class Proyectil(Entidad):
+    def __init__(self,vida, defensa, image, x, y, objetivo_x, objetivo_y, ataque,  grupo, velocidad=7):
+        self.sprite = pygame.Surface((12, 12))
+        self.sprite.fill(AMARILLO)
+        super().__init__(vida, ataque, defensa, x, y, image, grupo)       
+        self.vx = velocidad if objetivo_x > x else -velocidad
+        self.vy = velocidad if objetivo_y > y else -velocidad
 
-    def moverse(self):
-        dx = self.objetivo[0] - self.x
-        dy = self.objetivo[1] - self.y
-        dist = math.hypot(dx, dy)
-        if dist <= self.velocidad:
-            self.x, self.y = self.objetivo
-            self.activo = False
-        else:
-            self.x += dx / dist * self.velocidad
-            self.y += dy / dist * self.velocidad
-        self.rect.center = (self.x, self.y)
+    def avanzar(self):
+        self.moverse(self.vx, self.vy)
+        if self.x < 0 or self.y < 0:
+            self.estoy_vivo = False
 
-    def dibujar(self, pantalla):
-        pantalla.blit(self.sprite, self.rect)
+    def atacar(self, vida_enemigo, defensa_enemigo):
+        danio = max(1, self.ataque - defensa_enemigo)
+        self.estoy_vivo = False
+        return vida_enemigo - danio
 
 
-class Rayo(Proyectil):
-    pass
 
+class Pistola (Ataque):
+    def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo, x, y):
+        super().__init__(ataque, velocidad_ataque, area, cantidad, grupo, x, y)
 
-# ---------- ATAQUES ----------
-class PokeAtaque:
-    nombre = "Ataque"
-    multiplicador = 1.0
-    velocidad = 8
-    clase_proyectil = Proyectil
-    sprite = None  # se carga una vez
-
-    def lanzar(self, personaje, posicion_enemigo):
-        return self.clase_proyectil(
-            velocidad=self.velocidad,
-            sprite=self.sprite,
-            x=personaje.x,
-            y=personaje.y,
-            objetivo=posicion_enemigo,
-            daño=personaje.daño * self.multiplicador,
-        )
-
-
-class Lanzarayos(PokeAtaque):
-    nombre = "Lanzarayos"
-    multiplicador = 0.0
-    velocidad = 4
-    clase_proyectil = Rayo
-    sprite = rayo_sprite
-
+    def atacar():
+        pass
