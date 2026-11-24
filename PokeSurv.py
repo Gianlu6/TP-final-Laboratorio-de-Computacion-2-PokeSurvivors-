@@ -55,25 +55,26 @@ def main():
             if prota.rect.colliderect(enemigo.rect):
                 prota.vida = 1
 
-        disparo= prota.atacar(enemigos)
-        if disparo is not None:
-            proyectiles.append(disparo)
 
-        for p in proyectiles:
-            p.avanzar()
-            if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
+        # disparo = prota.atacar(enemigos)
+        # if disparo is not None:
+        #     proyectiles.append(disparo)
+
+        # for p in proyectiles:
+        #     p.avanzar()
+        #     if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
                 
-                p.estoy_vivo = False
-                p.kill()        #Kill las saca del sprite group para que no se renderice mas
-                continue
-            for enemigo in enemigos:
-                if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
-                    enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
-                    p.estoy_vivo = False
-                    p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
-                if enemigo.vida <=0:
-                    enemigo.estoy_vivo = False
-                    enemigo.kill()
+        #         p.estoy_vivo = False
+        #         p.kill()        #Kill las saca del sprite group para que no se renderice mas
+        #         continue
+        #     for enemigo in enemigos:
+        #         if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
+        #             enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
+        #             p.estoy_vivo = False
+        #             p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
+        #         if enemigo.vida <=0:
+        #             enemigo.estoy_vivo = False
+        #             enemigo.kill()
     
     
 
@@ -82,9 +83,7 @@ def main():
         VENTANA.fill((VERDE_OSCURO))                       #Color de Fondo 
         camara_grupo.camara_centrada(prota)                #Grupo
 
-        
-
-        # Limpiar proyectiles y enemigos muertos
+        # Limpiar proyectiles y enemigos muertos de las listas
         proyectiles[:] = [p for p in proyectiles if p.estoy_vivo]
         enemigos[:] = [e for e in enemigos if e.estoy_vivo]      
 
@@ -94,7 +93,8 @@ def main():
             break
 
         barra_prota.dibujar(VENTANA, prota.vida)
-        mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)            #Muestra texto de la vida
+        mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida
+        mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON1, NEGRO, 200, 610)            #Muestra texto de la vida
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
 

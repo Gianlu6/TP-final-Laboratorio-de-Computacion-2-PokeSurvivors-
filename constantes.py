@@ -21,6 +21,8 @@ AMARILLO = (255,255,0)
 
 VENTANA = pygame.display.set_mode((WIDTH, HEIGHT))
 FUENTE = pygame.font.SysFont("Arial", 30)
+FUENTE_POKEMON1 = pygame.font.Font("recursos\Pokemon Hollow.ttf",30)
+FUENTE_POKEMON2 = pygame.font.Font("recursos\Pokemon Solid.ttf",30)
 
 
 

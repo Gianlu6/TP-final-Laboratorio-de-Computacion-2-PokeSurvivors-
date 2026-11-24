@@ -50,14 +50,36 @@ class Entidad(pygame.sprite.Sprite, ABC):
     #     return (Ent_Enemiga.x, Ent_Enemiga.y)
 
 class SerVivo(Entidad):
-    def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
+    def __init__(self, vida_max, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
             super().__init__(x,y,sprite,grupo)         
-            self.__vida = vida
+            self.vida_max = vida_max
+            self.__vida = vida_max
             self.ataque = ataque
             self.defensa = defensa
             self.x = x
             self.y = y
             self.estoy_vivo = True
+
+    #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
+    #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
+    
+    #El getter de vida se llama asi:
+        #prota.vida 
+    @property                   
+    def vida(self):
+        return self.__vida
+
+    #El decorador .setter toma el nombre del atributo privado y cuando lo llamas 
+    # para editarlo como un atributo normal, en realidad pasa por el método setter validador
+
+    #El setter de vida se llama asi:
+    # prota.vida = danio
+    @vida.setter                                  
+    def vida(self, danio):
+        if danio >= self.__vida:
+            self.__vida = 0
+        else:
+            self.__vida -= danio
         
         
     @abstractmethod
@@ -89,9 +111,12 @@ class SerVivo(Entidad):
 
 #Entidad -> Movimiento/ataque/arma -> Impactrueno
 class Movimiento(Entidad):
-    def __init__(self, x, y, sprite, grupo, ataque_base):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
         super().__init__(x, y, sprite, grupo)
         self.ataque_base = ataque_base
+        self.tiempo_recarga = tiempo_recarga
 
+#Cada ciclo reloj se lo llama y ataca pasado su tiempo de recarga
+    @abstractmethod
     def atacar(self):
         pass
