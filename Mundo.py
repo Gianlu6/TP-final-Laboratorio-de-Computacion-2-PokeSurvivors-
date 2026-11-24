@@ -5,11 +5,15 @@ from constantes import *
 class Arbol(pygame.sprite.Sprite):
     def __init__(self, x, y, grupo, imagen):
         super().__init__(grupo)
+        self.x = x
+        self.y = y
         self.image = imagen
         self.rect = self.image.get_rect(midbottom=(x, y))
         
-def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, separacion=80):
+def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=1, separacion=80, ):
         imagen = pygame.image.load(ruta_imagen).convert_alpha()
+        if escala != 1:
+            imagen = pygame.transform.scale_by(imagen, escala)
         arboles = []
         intentos = 0
         while len(arboles) < cantidad and intentos < cantidad * 20:
@@ -19,6 +23,7 @@ def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, separ
             if all(abs(x - a.rect.centerx) > separacion or abs(y - a.rect.centery) > separacion
                     for a in arboles):
                 arboles.append(Arbol(x, y, grupo, imagen))
+                
         return arboles
         
 

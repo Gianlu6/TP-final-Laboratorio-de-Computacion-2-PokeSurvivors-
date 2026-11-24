@@ -23,7 +23,7 @@ camara_grupo = GrupoCamara("pasto.jpg")        #GRUPO DE CAMARA: para que se mue
 prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300)    #Instancia de personaje(Doble barra es división forzada a entero)
 barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
 proyectiles = []
-arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "arbol.png")
+arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "Oak_Tree.png", 3)
 
 #Creación de la función principal
 def main():
@@ -72,7 +72,7 @@ def main():
                 if enemigo.vida <=0:
                     enemigo.estoy_vivo = False
                     enemigo.kill()
-
+                    
         camara_grupo.update()
         
         camara_grupo.dibujar_fondo()
