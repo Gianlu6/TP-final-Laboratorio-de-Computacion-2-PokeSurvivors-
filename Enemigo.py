@@ -8,12 +8,12 @@ import random
 
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, velocidad=2):
-        super().__init__(vida_max, ataque, defensa, x, y, image, grupo)
+        super().__init__(vida_max, ataque, defensa, x, y, image, grupo, velocidad)
         self.velocidad = velocidad
         self.intervalo = 500
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)
-        self.vida = vida_max    
+        self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         #self.cantidad += 1
         
     def atacar():

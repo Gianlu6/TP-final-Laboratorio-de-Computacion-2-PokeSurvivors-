@@ -30,7 +30,7 @@ class Proyectil(Entidad):
     def atacar(self, vida_enemigo, defensa_enemigo):
         danio = max(1, self.ataque - defensa_enemigo)
         self.estoy_vivo = False
-        return vida_enemigo - danio
+        return danio
 
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
@@ -56,6 +56,10 @@ class Proyectil(Entidad):
 #Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
 #Tierra: daño de contacto o area con terremotos
 
+#atacar revisa el cooldown, 
+# recibe stats del usuario (atq,def,tipo) 
+# y de su o sus target(lista enemigos)
+
 class Impactrueno (Movimiento):
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
@@ -63,16 +67,27 @@ class Impactrueno (Movimiento):
     def atacar(self):
         pass
 
-class Placaje (Movimiento):
+class Placaje (Movimiento):     #Daño de contacto de personaje
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
 
     def atacar(self):
         pass
 
-class ElectroTela (Movimiento):
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
-        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
-
-    def atacar(self):
-        pass
+class ElectroTela (Movimiento):     
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga,rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga,rango)
+        #self.rect = self.rect.inflate(50*self.rango, 50*self.rango)
+        #self.rect.center = (x,y)
+        self.image = pygame.transform.scale_by(self.image,self.rango)
+        self.rect = self.image.get_rect(center=(x, y))
+        
+        self.ultimo_ataque = 0
+    
+    def atacar(self,autor,objetivos):
+        self.t_ahora = pygame.time.get_ticks()
+        if self.t_ahora - self.ultimo_ataque > self.tiempo_recarga:
+            for enemigo in objetivos:
+                if self.rect.colliderect(enemigo.rect):
+                    enemigo.quitar_vida(0.3)
+            self.ultimo_ataque = self.t_ahora

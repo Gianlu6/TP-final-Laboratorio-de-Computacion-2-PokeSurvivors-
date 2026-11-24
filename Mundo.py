@@ -48,7 +48,10 @@ class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites p
         self.offset.x = target.rect.centerx - self.mitad_ancho
         self.offset.y = target.rect.centery - self.mitad_alto
 
-        for sprite in sorted(self.sprites(), key=lambda s: s.rect.centery):         #El sorted + lambda se usa ordenar y dibujar los sprites en linea del mas alto en "y" al mas bajo (profundidad de atras hacia adelante)
+        for sprite in sorted(self.sprites(), key=lambda s: (getattr(s,'z',1), s.rect.centery)):         
+        #El sorted + lambda se usa ordenar y dibujar los sprites con 2 criterios: 
+        #El primero prioridad z, siendo 1 en SerVivo y 0 en Movimientos o sprites de ataque,
+        # y el segundo criterio es por linea del mas alto en "y" al mas bajo (profundidad de atras hacia adelante)
             rect_visual = sprite.image.get_rect(center=sprite.rect.center)          #Si a un sprite se le ajusta la hitbox con un rect.inflate, etc la colicion es forzada a estar anclada en el centro  
             off_pos = rect_visual.topleft - self.offset
             self.display_surface.blit(sprite.image, off_pos)

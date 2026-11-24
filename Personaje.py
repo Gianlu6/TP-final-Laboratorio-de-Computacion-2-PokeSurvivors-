@@ -4,55 +4,40 @@ from Enemigo import *
 from sprites import *
 
 class Personaje(SerVivo):
-    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, rango):
-        super().__init__(vida_max, ataque, defensa, x, y, image, grupo)
-        self.__vida = vida_max
+    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, rango,velocidad):
+        super().__init__(vida_max, ataque, defensa, x, y, image, grupo,velocidad)
+        self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         self.rango = rango
         self.grupo = grupo
         self.rect = self.rect.inflate(-50, -50)
         self.rect.center = (x,y)
 
+        self.inventario = [ElectroTela(self.x, self.y, rayo_sprite, grupo, self.ataque,0.5,self.rango)]
 
         self.contador = 0 #PROYECTILES
 
-    #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
-    #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
-    
-    #El getter de vida se llama asi:
-        #prota.vida 
-    @property                   
-    def vida(self):
-        return self.__vida
-
-    #El decorador .setter toma el nombre del atributo privado y cuando lo llamas 
-    # para editarlo como un atributo normal, en realidad pasa por el método setter validador
-
-    #El setter de vida se llama asi:
-    # prota.vida = danio
-    @vida.setter                                  
-    def vida(self, danio):
-        if danio >= self.__vida:
-            self.__vida = 0
-        else:
-            self.__vida -= danio
-
-    
 
 
         
-    def atacar(self,ene):
-        #Podria se una lista que recorra las instancias de ataques que usan de método común atacar    
-        self.contador+=1
+    # def atacar(self,ene):    
+    #     self.contador+=1
 
-        if self.contador < 30 or not ene:
-            return None
-        else:
-            self.contador = 0
-            pos_x,pos_y = self.buscar_pos(ene[0])
-            return Proyectil(rayo_sprite,self.x, self.y, pos_x, pos_y, self.grupo,1000)
+    #     if self.contador < 30 or not ene:
+    #         return None
+    #     else:
+    #         self.contador = 0
+    #         pos_x,pos_y = self.buscar_pos(ene[0])
+    #         return Proyectil(rayo_sprite,self.x, self.y, pos_x, pos_y, self.grupo,1000)
     #el personaje recibe un diccionario con todos los enemigos presentes como claves y 
     #sus posiciones relativas al personaje como valores y quien tenga la menor de ellas
     #sera al que ataque.
-    
-    
-        
+    def atacar(self, ene):
+        for movimiento in self.inventario:
+            movimiento.atacar(self,enemigos)
+
+    def actualizar_posicion_armas(self):    #Refresca pocicion de ataques que siguen a personaje y se desfasan por separacion
+        for movimiento in self.inventario:
+            if type(movimiento) is ElectroTela:
+                dx = (self.x + movimiento.offset_x) - movimiento.x
+                dy = (self.y + movimiento.offset_y) - movimiento.y
+                movimiento.moverse(dx, dy)

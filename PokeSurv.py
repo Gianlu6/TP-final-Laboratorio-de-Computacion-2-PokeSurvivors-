@@ -9,25 +9,6 @@ from Ataque import *
 from BarraVida import *
 from sprites import *
 
-#Inicialización de pygame
-pygame.init() 
-
-RELOJ = pygame.time.Clock()                                     #Tiempo del juego
-
-#Creación de ventana gráfica
-pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto "ventana" es la constante PANTALLA
-
-#Set camara
-camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
-
-
-
-mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 300)    #Instancia de personaje(Doble barra es división forzada a entero)
-barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
-proyectiles = []
-
-
 #Creación de la función principal
 def main():
     while True:                                                     #BUCLE DEL JUEGO
@@ -39,13 +20,13 @@ def main():
         #Input de teclas
         tecla = pygame.key.get_pressed()                            # Espera tecla del jugador
         if tecla[pygame.K_LEFT]:                                    # Analiza la tecla del jugador
-            prota.moverse(-VELOCIDAD_PERSONAJE, 0)                  # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
+            prota.moverse(-prota.velocidad, 0)                  # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
         if tecla[pygame.K_RIGHT]:
-            prota.moverse(VELOCIDAD_PERSONAJE, 0)
+            prota.moverse(prota.velocidad, 0)
         if tecla[pygame.K_UP]:
-            prota.moverse(0, -VELOCIDAD_PERSONAJE)                             #EN PYGAME EL EJE 'Y' HACIA ARRIBA ES NEGATIVO
+            prota.moverse(0, -prota.velocidad)                             #EN PYGAME EL EJE 'Y' HACIA ARRIBA ES NEGATIVO
         if tecla[pygame.K_DOWN]:
-            prota.moverse(0, VELOCIDAD_PERSONAJE)
+            prota.moverse(0, prota.velocidad)
         
         #Funcion que crea y agrega enemigos a la lista hasta un limite
         spawneo_enemigos(prota,camara_grupo)
@@ -53,30 +34,32 @@ def main():
         #chequea colisiones con enemigos y te hace daño
         for enemigo in enemigos:
             if prota.rect.colliderect(enemigo.rect):
-                prota.vida = 1
+                prota.quitar_vida(1)
 
 
-        disparo = prota.atacar(enemigos)
-        if disparo is not None:
-            proyectiles.append(disparo)
+        # disparo = prota.atacar(enemigos)
+        # if disparo is not None:
+        #     proyectiles.append(disparo)
 
-        for p in proyectiles:
-            p.avanzar()
-            if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
+        # for p in proyectiles:
+        #     p.avanzar()
+        #     if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
                 
-                p.estoy_vivo = False
-                p.kill()        #Kill las saca del sprite group para que no se renderice mas
-                continue
-            for enemigo in enemigos:
-                if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
-                    enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
-                    p.estoy_vivo = False
-                    p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
-                if enemigo.vida <=0:
-                    enemigo.estoy_vivo = False
-                    enemigo.kill()
+        #         p.estoy_vivo = False
+        #         p.kill()        #Kill las saca del sprite group para que no se renderice mas
+        #         continue
+        #     for enemigo in enemigos:
+        #         if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
+        #             enemigo.quitar_vida(p.atacar(enemigo.vida, enemigo.defensa))
+        #             p.estoy_vivo = False
+        #             p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
+        #         if enemigo.vida <=0:
+        #             enemigo.estoy_vivo = False
+        #             enemigo.kill()
+
+        prota.atacar(enemigos)
     
-    
+        prota.actualizar_posicion_armas()
 
         camara_grupo.update()
         
@@ -92,11 +75,39 @@ def main():
         if prota.vida <= 0:
             break
 
+        #TEMPORAL: Muestra vida de enemigos
+        for enemigo in enemigos:
+            mostrar_texto(f"{round(enemigo.vida,2)}", FUENTE, NEGRO, enemigo.x, enemigo.y)  
+        
         barra_prota.dibujar(VENTANA, prota.vida)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON1, NEGRO, 200, 610)            #Muestra texto de la vida
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
 
+
+
+
+
+
 if __name__ =='__main__':               #Llamada al main() para ejecutar código principal
+    #Inicialización de pygame
+    pygame.init() 
+
+    RELOJ = pygame.time.Clock()                                     #Tiempo del juego
+
+    #Creación de ventana gráfica
+    pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto "ventana" es la constante PANTALLA
+
+    #Set camara
+    camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
+
+
+
+    mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
+    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 2,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
+    barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
+    proyectiles = []
+
+
     main()
