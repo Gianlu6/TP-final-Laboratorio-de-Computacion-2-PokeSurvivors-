@@ -1,9 +1,9 @@
 from Ataque import *
-from Clases_Abs import Entidad
+from Clases_Abs import SerVivo
 from Enemigo import *
 from sprites import *
 
-class Personaje(Entidad):
+class Personaje(SerVivo):
     def __init__(self, vida, ataque, defensa, x, y, image, grupo, rango):
         super().__init__(vida, ataque, defensa, x, y, image, grupo)
         self.__vida = vida
@@ -49,7 +49,7 @@ class Personaje(Entidad):
         else:
             self.contador = 0
             pos_x,pos_y = self.buscar_pos(ene[0])
-            return Proyectil(1,0,rayo_sprite,self.x, self.y, pos_x, pos_y, self.ataque, self.grupo)
+            return Proyectil(rayo_sprite,self.x, self.y, pos_x, pos_y, self.grupo,1000)
     #el personaje recibe un diccionario con todos los enemigos presentes como claves y 
     #sus posiciones relativas al personaje como valores y quien tenga la menor de ellas
     #sera al que ataque.

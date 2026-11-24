@@ -64,3 +64,9 @@ def separar(entidad_a, entidad_b):
 def separar_todos(entidades):
     for a, b in combinations(entidades, 2):
         separar(a, b)
+
+#Distancia entre dos posiciones. Recibe dos tuplas de poscicion x,y y devuelve distancia 
+def distancia_entre_puntos(a,b):
+    dif_x = a[0] - b[0]
+    dif_y = a[1] - b[1]
+    return math.hypot(dif_x, dif_y)

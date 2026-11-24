@@ -2,11 +2,8 @@ from abc import ABC, abstractmethod
 from constantes import *
 
 class Entidad(pygame.sprite.Sprite, ABC):
-    def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
-        super().__init__(grupo)         #Pygame
-        self.__vida = vida
-        self.ataque = ataque
-        self.defensa = defensa
+    def __init__(self,x,y,sprite, grupo):
+        super().__init__(grupo)
         self.x = x
         self.y = y
         self.estoy_vivo = True
@@ -14,21 +11,61 @@ class Entidad(pygame.sprite.Sprite, ABC):
         #Atributos específicos de la clase tipo pygame Sprite:
         self.image = sprite
         self.rect = self.image.get_rect (center=(x,y))
-        
 
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
         self.y += dy
         self.rect.center = (self.x, self.y)
+
+    #Getter de posicion
+    def posicion(self):
+        return (self.x,self.y)
+    
+    
+    # def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
+    #     super().__init__(grupo)         #Pygame
+    #     self.__vida = vida
+    #     self.ataque = ataque
+    #     self.defensa = defensa
+    #     self.x = x
+    #     self.y = y
+    #     self.estoy_vivo = True
+
+    #     #Atributos específicos de la clase tipo pygame Sprite:
+    #     self.image = sprite
+    #     self.rect = self.image.get_rect (center=(x,y))
+        
+
+    # def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
+    #     self.x += dx
+    #     self.y += dy
+    #     self.rect.center = (self.x, self.y)
+        
+        
+    # @abstractmethod
+    # def atacar(self, vida_enemigo, defensa_enemigo):
+    #     pass
+   
+    # def buscar_pos(self, Ent_Enemiga):
+    #     return (Ent_Enemiga.x, Ent_Enemiga.y)
+
+class SerVivo(Entidad):
+    def __init__(self, vida, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
+            super().__init__(x,y,sprite,grupo)         
+            self.__vida = vida
+            self.ataque = ataque
+            self.defensa = defensa
+            self.x = x
+            self.y = y
+            self.estoy_vivo = True
         
         
     @abstractmethod
     def atacar(self, vida_enemigo, defensa_enemigo):
         pass
-   
+    
     def buscar_pos(self, Ent_Enemiga):
         return (Ent_Enemiga.x, Ent_Enemiga.y)
-
 
 
 #Base de ataques?
@@ -50,22 +87,11 @@ class Entidad(pygame.sprite.Sprite, ABC):
 #Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
 #Tierra: daño de contacto o area con terremotos
 
+#Entidad -> Movimiento/ataque/arma -> Impactrueno
+class Movimiento(Entidad):
+    def __init__(self, x, y, sprite, grupo, ataque_base):
+        super().__init__(x, y, sprite, grupo)
+        self.ataque_base = ataque_base
 
-
-class Ataque (pygame.sprite.Sprite, ABC):
-    def __init__(self, ataque, velocidad_ataque, area, cantidad, grupo, x, y):
-        super().__init__(grupo)
-        self.ataque = ataque
-        self.velocidad_ataque = velocidad_ataque
-        self.area = area
-        self.cantidad = cantidad
-        self.x = x
-        self.y = y
-        self.estoy_vivo = True
-
-    def moverse():
-        pass
-
-    @abstractmethod
-    def atacar():
+    def atacar(self):
         pass

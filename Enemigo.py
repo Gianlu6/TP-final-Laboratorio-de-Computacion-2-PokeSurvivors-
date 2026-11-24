@@ -1,12 +1,12 @@
 import math
-from Clases_Abs import Entidad
+from Clases_Abs import SerVivo
 import pygame
 from constantes import *
 from sprites import *
 import random
 
 
-class Enemigo(Entidad):
+class Enemigo(SerVivo):
     def __init__(self, vida, ataque, defensa, x, y, image, grupo, velocidad=2):
         super().__init__(vida, ataque, defensa, x, y, image, grupo)
         self.velocidad = velocidad
