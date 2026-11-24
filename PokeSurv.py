@@ -56,25 +56,25 @@ def main():
                 prota.vida = 1
 
 
-        # disparo = prota.atacar(enemigos)
-        # if disparo is not None:
-        #     proyectiles.append(disparo)
+        disparo = prota.atacar(enemigos)
+        if disparo is not None:
+            proyectiles.append(disparo)
 
-        # for p in proyectiles:
-        #     p.avanzar()
-        #     if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
+        for p in proyectiles:
+            p.avanzar()
+            if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
                 
-        #         p.estoy_vivo = False
-        #         p.kill()        #Kill las saca del sprite group para que no se renderice mas
-        #         continue
-        #     for enemigo in enemigos:
-        #         if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
-        #             enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
-        #             p.estoy_vivo = False
-        #             p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
-        #         if enemigo.vida <=0:
-        #             enemigo.estoy_vivo = False
-        #             enemigo.kill()
+                p.estoy_vivo = False
+                p.kill()        #Kill las saca del sprite group para que no se renderice mas
+                continue
+            for enemigo in enemigos:
+                if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
+                    enemigo.vida = p.atacar(enemigo.vida, enemigo.defensa)
+                    p.estoy_vivo = False
+                    p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
+                if enemigo.vida <=0:
+                    enemigo.estoy_vivo = False
+                    enemigo.kill()
     
     
 

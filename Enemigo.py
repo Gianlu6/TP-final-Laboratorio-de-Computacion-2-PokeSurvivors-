@@ -7,13 +7,13 @@ import random
 
 
 class Enemigo(SerVivo):
-    def __init__(self, vida, ataque, defensa, x, y, image, grupo, velocidad=2):
-        super().__init__(vida, ataque, defensa, x, y, image, grupo)
+    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, velocidad=2):
+        super().__init__(vida_max, ataque, defensa, x, y, image, grupo)
         self.velocidad = velocidad
         self.intervalo = 500
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)
-        self.vida = vida    
+        self.vida = vida_max    
         #self.cantidad += 1
         
     def atacar():

@@ -53,33 +53,13 @@ class SerVivo(Entidad):
     def __init__(self, vida_max, ataque, defensa, x, y, sprite, grupo):    # x, y -> Coordenadas de posición
             super().__init__(x,y,sprite,grupo)         
             self.vida_max = vida_max
-            self.__vida = vida_max
             self.ataque = ataque
             self.defensa = defensa
             self.x = x
             self.y = y
             self.estoy_vivo = True
 
-    #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
-    #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
     
-    #El getter de vida se llama asi:
-        #prota.vida 
-    @property                   
-    def vida(self):
-        return self.__vida
-
-    #El decorador .setter toma el nombre del atributo privado y cuando lo llamas 
-    # para editarlo como un atributo normal, en realidad pasa por el método setter validador
-
-    #El setter de vida se llama asi:
-    # prota.vida = danio
-    @vida.setter                                  
-    def vida(self, danio):
-        if danio >= self.__vida:
-            self.__vida = 0
-        else:
-            self.__vida -= danio
         
         
     @abstractmethod
@@ -88,26 +68,6 @@ class SerVivo(Entidad):
     
     def buscar_pos(self, Ent_Enemiga):
         return (Ent_Enemiga.x, Ent_Enemiga.y)
-
-
-#Base de ataques?
-#Rayo: Tiene mas daño que impactrueno
-#Impactrueno: rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
-#Cola férrea, ataque normal para los de tierra (látigo de VS)
-#Placaje: Ataque normal, daño de contacto
-#Placaje eléctrico: Ataque eléctrico, daño de contacto (mas daño que rayo, deja estela de daño?)
-#Electro tela/red: escudo electrico (ajo VS)
-#Bola voltio: Protectil? Varita de fuego? El ataque sube en base a la velocidad
-#Mega-punch, headbutt: Normales
-#Volt Switch: Eléctrico. Pega y cambia, poco daño
-#Proyectiles?
-
-#Modificadores pasivos para evolucion
-
-#Enemigo. Ataques segun tipo (daño de contacto y proyectiles):
-#Fuego y agua: proyectiles, fuego hace mas daño, agua lanza mas proyectiles
-#Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
-#Tierra: daño de contacto o area con terremotos
 
 #Entidad -> Movimiento/ataque/arma -> Impactrueno
 class Movimiento(Entidad):

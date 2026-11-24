@@ -36,3 +36,43 @@ class Proyectil(Entidad):
         self.x += dx
         self.y += dy
         self.rect.center = (self.x, self.y)
+
+#Base de ataques?
+#Rayo: Tiene mas daño que impactrueno
+#Impactrueno: rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
+#Cola férrea, ataque normal para los de tierra (látigo de VS)
+#Placaje: Ataque normal, daño de contacto
+#Placaje eléctrico: Ataque eléctrico, daño de contacto (mas daño que rayo, deja estela de daño?)
+#Electro tela/red: escudo electrico (ajo VS)
+#Bola voltio: Protectil? Varita de fuego? El ataque sube en base a la velocidad
+#Mega-punch, headbutt: Normales
+#Volt Switch: Eléctrico. Pega y cambia, poco daño
+#Proyectiles?
+
+#Modificadores pasivos para evolucion
+
+#Enemigo. Ataques segun tipo (daño de contacto y proyectiles):
+#Fuego y agua: proyectiles, fuego hace mas daño, agua lanza mas proyectiles
+#Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
+#Tierra: daño de contacto o area con terremotos
+
+class Impactrueno (Movimiento):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
+
+    def atacar(self):
+        pass
+
+class Placaje (Movimiento):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
+
+    def atacar(self):
+        pass
+
+class ElectroTela (Movimiento):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
+
+    def atacar(self):
+        pass
