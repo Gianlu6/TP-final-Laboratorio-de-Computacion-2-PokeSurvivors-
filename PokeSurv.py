@@ -31,10 +31,12 @@ def main():
         #Funcion que crea y agrega enemigos a la lista hasta un limite
         spawneo_enemigos(prota,camara_grupo)
 
+
+        
         #chequea colisiones con enemigos y te hace daño
         for enemigo in enemigos:
-            if prota.rect.colliderect(enemigo.rect):
-                prota.quitar_vida(1)
+            enemigo.atacar(prota)
+            
 
 
         # disparo = prota.atacar(enemigos)
@@ -105,7 +107,7 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
 
 
     mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 2,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
+    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
     proyectiles = []
 

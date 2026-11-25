@@ -12,7 +12,7 @@ class Personaje(SerVivo):
         self.rect = self.rect.inflate(-50, -50)
         self.rect.center = (x,y)
 
-        self.inventario = [ElectroTela(self.x, self.y, rayo_sprite, grupo, self.ataque,0.5,self.rango)]
+        self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,0.5,self.rango)]
 
         self.contador = 0 #PROYECTILES
 

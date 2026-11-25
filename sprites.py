@@ -11,3 +11,6 @@ malo_sprite = pygame.transform.scale(malo_sprite_load, (50, 50))
 
 rayo_sprite_load = pygame.image.load("rayo.png").convert_alpha()
 rayo_sprite = pygame.transform.scale(rayo_sprite_load, (100, 100))
+
+electroTela_sprite_load = pygame.image.load("recursos\ElectroTela.png").convert_alpha()
+electroTela_sprite = pygame.transform.scale(electroTela_sprite_load, (200, 200))

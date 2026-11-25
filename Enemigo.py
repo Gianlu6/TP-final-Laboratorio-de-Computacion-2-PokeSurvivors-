@@ -14,11 +14,13 @@ class Enemigo(SerVivo):
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
-        #self.cantidad += 1
         
-    def atacar():
-        pass
         
+    def atacar(self,objetivo):
+        if self.rect.colliderect(objetivo.rect):
+            objetivo.quitar_vida(1)
+
+
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()
         

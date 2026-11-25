@@ -1,5 +1,7 @@
+import pygame
 from abc import ABC, abstractmethod
 from constantes import *
+
 
 class Entidad(pygame.sprite.Sprite, ABC):
     def __init__(self,x,y,sprite, grupo):  #z es un atributo de prioridad de renderizado, teniendo Los seres vivos mas prioritdad que las armas
@@ -32,6 +34,9 @@ class SerVivo(Entidad):
             #self.x = x
             #self.y = y
             self.velocidad = velocidad
+            self.image_original = self.image
+            self.tiempo_danio = 0               # -> Tiempo que pasó desde que se hizo daño (MILISEGUNDOS)
+            self.invulnerabilidad = 250           # -> Tiempo el cual no deberia recibir daño aunque se acierte el ataque (MILISEGUNDOS)
 
     #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
     #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
@@ -54,13 +59,16 @@ class SerVivo(Entidad):
 
 
     def quitar_vida(self, danio):
-        if danio >= self.vida:
-            self.vida = 0
-            self.estoy_vivo = False
-            self.kill()
-        else:
-            self.vida -= danio
-
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+            if danio >= self.vida:
+                self.vida = 0
+                self.estoy_vivo = False
+                self.kill()
+            else:
+                self.vida -= danio
+                self.recibir_danio()
+            
+        
 
     def curar_vida(self,curacion):
         if curacion+self.vida >= self.vida_max:
@@ -68,6 +76,17 @@ class SerVivo(Entidad):
         else:
             self.vida+=curacion
 
+    def recibir_danio(self):                                    #Metodo que pone en rojo el sprite cuando recibe danio
+        mascara = pygame.mask.from_surface(self.image)
+        self.image = mascara.to_surface(setcolor=ROJO, unsetcolor=(0, 0, 0, 0))
+        self.tiempo_danio = pygame.time.get_ticks()
+        
+
+    def update(self):                                                               #Metodo que se llama en grupo_camara en el bucle para actualizar sprites. 
+        # Pasados ciertos segundos vuelve la imagen de rojo daño a la original
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+            self.image = self.image_original
+            self.tiempo_danio = 0
 
 
         

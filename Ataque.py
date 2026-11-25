@@ -77,17 +77,16 @@ class Placaje (Movimiento):     #Daño de contacto de personaje
 class ElectroTela (Movimiento):     
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga,rango):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga,rango)
-        #self.rect = self.rect.inflate(50*self.rango, 50*self.rango)
-        #self.rect.center = (x,y)
         self.image = pygame.transform.scale_by(self.image,self.rango)
         self.rect = self.image.get_rect(center=(x, y))
-        
+        self.radius = self.rect.width //2.5 #Creacion de colicion circular
+
         self.ultimo_ataque = 0
     
     def atacar(self,autor,objetivos):
         self.t_ahora = pygame.time.get_ticks()
         if self.t_ahora - self.ultimo_ataque > self.tiempo_recarga:
             for enemigo in objetivos:
-                if self.rect.colliderect(enemigo.rect):
+                if pygame.sprite.collide_circle(self, enemigo):
                     enemigo.quitar_vida(0.3)
             self.ultimo_ataque = self.t_ahora
