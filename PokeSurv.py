@@ -76,10 +76,6 @@ def main():
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-
-        #TEMPORAL: Muestra vida de enemigos
-        for enemigo in enemigos:
-            mostrar_texto(f"{round(enemigo.vida,2)}", FUENTE, NEGRO, enemigo.x, enemigo.y)  
         
         barra_prota.dibujar(VENTANA, prota.vida)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida

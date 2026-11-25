@@ -53,6 +53,21 @@ class Proyectil(Entidad):
 #atacar revisa el cooldown, 
 # recibe stats del usuario (atq,def,tipo) 
 # y de su o sus target(lista enemigos)
+class Chispitas (Movimiento):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
+
+    def atacar(self, autor, objetivos):
+        super().atacar(autor, objetivos)
+        pass
+
+class ColaFerrea(Movimiento):               #Daño normal con un poco mas de distancia
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
+
+    def atacar(self, autor, objetivos):
+        super().atacar(autor, objetivos)
+        pass
 
 class Rayo (Movimiento):             #Impacto de rayos a enemigos random
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
@@ -60,19 +75,34 @@ class Rayo (Movimiento):             #Impacto de rayos a enemigos random
         self.ultimo_ataque = 0
         self.image = pygame.Surface((0,0)) #Dejamos el sprite Vacio
         self.rayo_image = sprite
+        self.rango = 600        #Alcance de 700 pixeles o casi toda la pantalla (excluye afuera de ella)
+        self.timepo_rayo = 0
 
     def atacar(self, autor, objetivos):
         self.t_ahora = pygame.time.get_ticks()
+        victimas_en_rango = []             
         if self.t_ahora - self.ultimo_ataque >= self.tiempo_recarga and len(objetivos)!=0:
-            victima = objetivos[random.randint(0,len(objetivos)-1)]
-            victima.quitar_vida(self.ataque_base) #Dañar enemigo aleatorio
-            self.image = self.rayo_image
-            self.rect = self.image.get_rect(midbottom=autor.buscar_pos(victima))
-            self.ultimo_ataque = self.t_ahora
+            for enemigo in objetivos:                           
+                if distancia_entre_puntos((autor.x,autor.y),(enemigo.x,enemigo.y))<self.rango:
+                    victimas_en_rango.append(enemigo)             #Lista intermedia de enemigos que cumplen con un rango o se ven en pantalla
+
+                if len(victimas_en_rango)!=0:
+                    victima = victimas_en_rango[random.randint(0,len(victimas_en_rango)-1)]
+                    victima.quitar_vida(self.ataque_base)  #Dañar enemigo aleatorio
+                    self.mostrar_rayo(autor.buscar_pos(victima))
+                    self.ultimo_ataque = self.t_ahora
+                    self.timepo_rayo = self.t_ahora
+        if self.t_ahora - self.timepo_rayo >= 100:
+            self.borrar_rayo()
+
+    def mostrar_rayo(self,pos):
+        self.image = self.rayo_image           #Mostrar sprite de rayo
+        self.rect = self.image.get_rect(midbottom=pos)
+
+    def borrar_rayo (self):
+        self.image = pygame.Surface((0,0)) #Dejamos el sprite Vacio
+        self.rect = self.image.get_rect(center=(self.x,self.y))
             
-        #Mostrar sprite de rayo
-
-
 class Placaje (Movimiento):     #Daño de contacto de personaje del tipo 'normal' para los que son inmunes al rayo
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
@@ -83,14 +113,6 @@ class Placaje (Movimiento):     #Daño de contacto de personaje del tipo 'normal
         for enemigo in objetivos:           
             if autor.rect.colliderect(enemigo.rect):
                         enemigo.quitar_vida(self.ataque_base)
-
-class ColaFerrea(Movimiento):               #Daño normal con un poco mas de distancia
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
-        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
-
-    def atacar(self, autor, objetivos):
-        super().atacar(autor, objetivos)
-        pass
 
 class ElectroTela (Movimiento):     #Area electrica que drena vida cada medio segundo. 
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga,rango):

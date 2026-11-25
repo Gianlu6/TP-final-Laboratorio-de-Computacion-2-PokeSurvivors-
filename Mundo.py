@@ -55,3 +55,7 @@ class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites p
             rect_visual = sprite.image.get_rect(center=sprite.rect.center)          #Si a un sprite se le ajusta la hitbox con un rect.inflate, etc la colicion es forzada a estar anclada en el centro  
             off_pos = rect_visual.topleft - self.offset
             self.display_surface.blit(sprite.image, off_pos)
+
+            #Dibujar vida enemigos
+            if hasattr(sprite,"mostrar_numeros_impacto"):
+                sprite.mostrar_numeros_impacto(self.display_surface, self.offset)

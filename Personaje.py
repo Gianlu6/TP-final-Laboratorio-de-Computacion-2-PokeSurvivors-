@@ -9,13 +9,14 @@ class Personaje(SerVivo):
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         self.rango = rango
         self.grupo = grupo
+        
         self.rect = self.rect.inflate(-50, -50)
         self.rect.center = (x,y)
 
-        #self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
-        #                   Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0)]
+        self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
+                           Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
+                           Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.5,500,1)]
         
-        self.inventario = [Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.5,500,1)]
 
 
         self.contador = 0 #PROYECTILES

@@ -37,7 +37,27 @@ class Enemigo(SerVivo):
         if distancia > self.velocidad:
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
 
+    def mostrar_numeros_impacto(self,superficie,offset):    #Voy a llamar un dibjuado especial desde grupo camara para los numeritos de daño
+        if self.vida < self.vida_max:
+            barra_ancho= 50
+            barra_alto = 6
 
+            barra_x = self.rect.centerx - (barra_ancho // 2) - offset.x
+            barra_y = self.rect.top - 12 - offset.y
+
+            ratio = max(0,self.vida / self.vida_max)
+            ancho_actual = int(barra_ancho*ratio)
+
+            bg_barra = pygame.Rect(barra_x,barra_y,barra_ancho,barra_alto)
+            vida_barra = pygame.Rect(barra_x,barra_y,ancho_actual,barra_alto)
+
+            pygame.draw.rect(superficie, AZUL, bg_barra)
+            pygame.draw.rect(superficie, VERDE, vida_barra)
+
+            texto_offset_x = self.x - offset.x - (self.image.get_width()//2)
+            texto_offset_y = self.y - offset.y + 10        
+            mostrar_texto(f"{self.vida}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
+                    
 
 ultimo_spawn = 0
 enemigos = []

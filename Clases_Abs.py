@@ -31,7 +31,7 @@ class SerVivo(Entidad):
             self.__vida = vida_max 
             self.ataque = ataque
             self.defensa = defensa
-            self.tipo = tipo
+            self.__tipo = tipo
             
             self.velocidad = velocidad
             self.image_original = self.image
@@ -67,8 +67,6 @@ class SerVivo(Entidad):
             else:
                 self.vida -= danio
                 self.recibir_danio()
-            
-        
 
     def curar_vida(self,curacion):
         if curacion+self.vida >= self.vida_max:
@@ -87,6 +85,11 @@ class SerVivo(Entidad):
         if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
             self.image = self.image_original
             self.tiempo_danio = 0
+
+
+    @property       #Tipo solo puede leerse
+    def tipo(self):
+        return self.__tipo
 
 
         
