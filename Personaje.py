@@ -4,8 +4,8 @@ from Enemigo import *
 from sprites import *
 
 class Personaje(SerVivo):
-    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, rango,velocidad):
-        super().__init__(vida_max, ataque, defensa, x, y, image, grupo,velocidad)
+    def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, rango,velocidad):
+        super().__init__(vida_max, ataque, defensa, tipo, x, y, image, grupo,velocidad)
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         self.rango = rango
         self.grupo = grupo

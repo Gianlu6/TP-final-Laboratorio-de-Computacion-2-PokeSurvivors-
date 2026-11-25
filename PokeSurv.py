@@ -20,7 +20,7 @@ def main():
         #Input de teclas
         tecla = pygame.key.get_pressed()                            # Espera tecla del jugador
         if tecla[pygame.K_LEFT]:                                    # Analiza la tecla del jugador
-            prota.moverse(-prota.velocidad, 0)                  # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
+            prota.moverse(-prota.velocidad, 0)                      # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
         if tecla[pygame.K_RIGHT]:
             prota.moverse(prota.velocidad, 0)
         if tecla[pygame.K_UP]:
@@ -107,7 +107,7 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
 
 
     mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
+    prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
     proyectiles = []
 

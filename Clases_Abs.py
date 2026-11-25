@@ -25,12 +25,13 @@ class Entidad(pygame.sprite.Sprite, ABC):
     
 
 class SerVivo(Entidad):
-    def __init__(self, vida_max, ataque, defensa, x, y, sprite, grupo,velocidad):    # x, y -> Coordenadas de posición
+    def __init__(self, vida_max, ataque, defensa, tipo, x, y, sprite, grupo,velocidad):    # x, y -> Coordenadas de posición
             super().__init__(x,y,sprite,grupo)         
             self.vida_max = vida_max
             self.__vida = vida_max 
             self.ataque = ataque
             self.defensa = defensa
+            self.tipo = tipo
             #self.x = x
             #self.y = y
             self.velocidad = velocidad

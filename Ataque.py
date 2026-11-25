@@ -88,5 +88,5 @@ class ElectroTela (Movimiento):
         if self.t_ahora - self.ultimo_ataque > self.tiempo_recarga:
             for enemigo in objetivos:
                 if pygame.sprite.collide_circle(self, enemigo):
-                    enemigo.quitar_vida(0.3)
+                    enemigo.quitar_vida(autor.ataque*0.3)
             self.ultimo_ataque = self.t_ahora

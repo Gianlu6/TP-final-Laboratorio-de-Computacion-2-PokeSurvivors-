@@ -1,6 +1,7 @@
 #Resolución
 import pygame
 import math
+import random
 from itertools import combinations
 
 
@@ -72,3 +73,32 @@ def distancia_entre_puntos(a,b):
     dif_x = a[0] - b[0]
     dif_y = a[1] - b[1]
     return math.hypot(dif_x, dif_y)
+
+#Recibe varios parametros y retorna el calculo de danio a aplicar a la vida. Recibe referencia de las entidades
+def calculo_danio(emisor,destinatario,ataque_movimiento,tipo_movimiento):
+    mult_tipo=1
+    if tipo_movimiento == 'electric':       #Si Pikachu ataca
+        if destinatario.tipo=='ground':
+            mult_tipo = 0
+        elif destinatario.tipo=='water' or destinatario.tipo=='flying':
+            mult_tipo = 2
+        elif destinatario.tipo=='dragon' or destinatario.tipo=='electric' or destinatario.tipo=='grass':
+            mult_tipo = 0.5
+    if destinatario.tipo == 'electric':     #Si atacan a Pikachu
+        if emisor.tipo == 'ground':
+            mult_tipo = 2
+        elif emisor.tipo == 'electric' or emisor.tipo == 'flying' or emisor.tipo == 'steel':
+            mult_tipo = 0.5
+    cuenta = ataque_movimiento*(emisor.ataque/destinatario.defensa)*mult_tipo*random.uniform(0.95,1.05)
+    return cuenta
+
+#La multiplicacion de daño que hace Pikachu segun tipo:
+# x0 si el enemigo es Tierra (Inmune)
+# x2 si es Agua o Volador (debil a la electricidad)
+# x0.5 a Dragon, Eléctrico o planta
+# x1 al resto de los tipos
+
+#La multiplicacion del ataque del enemigo hacia Pikachu
+# x2 de daño si lo ataca un tipo Tierra
+# x0.5 electrico, volador, acero
+# x1 el resto

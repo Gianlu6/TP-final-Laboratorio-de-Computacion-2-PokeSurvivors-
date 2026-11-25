@@ -7,8 +7,8 @@ import random
 
 
 class Enemigo(SerVivo):
-    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, velocidad=2):
-        super().__init__(vida_max, ataque, defensa, x, y, image, grupo, velocidad)
+    def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
+        super().__init__(vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad)
         self.velocidad = velocidad
         self.intervalo = 500
         self.ultimo_chequeo = 0
@@ -50,7 +50,7 @@ def spawneo_enemigos(personaje, grupo):
     y = random.randint(0, HEIGHT)   
     if len (enemigos) < 8 and ahora - ultimo_spawn >= 2000:
         ultimo_spawn = ahora
-        enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
+        enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
 
     for enemigo in enemigos:
         enemigo.avanzar(personaje)
