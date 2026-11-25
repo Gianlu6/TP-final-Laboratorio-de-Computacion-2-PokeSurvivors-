@@ -56,6 +56,6 @@ class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites p
             off_pos = rect_visual.topleft - self.offset
             self.display_surface.blit(sprite.image, off_pos)
 
-            #Dibujar vida enemigos
+            #Dibujar vida enemigos y letritas con metodo separado
             if hasattr(sprite,"mostrar_numeros_impacto"):
                 sprite.mostrar_numeros_impacto(self.display_surface, self.offset)
