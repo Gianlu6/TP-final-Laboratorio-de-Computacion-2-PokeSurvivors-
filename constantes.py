@@ -1,15 +1,19 @@
 #Resolución
 import pygame
 import math
+from itertools import combinations
+
 
 pygame.font.init()
 
 WIDTH, HEIGHT = 1080, 720    
 VELOCIDAD_PERSONAJE = 3.50
 
+
 #Colores Básico (Tupla de valores RGB 8 bits, 0-255)
 AZUL = (0,0,255)
 ROJO = (255,0,0)
+VERDE_OSCURO = (69, 139, 0)
 VERDE = (0,255,0)
 BLANCO = (255,255,255)
 NEGRO = (0,0,0)
@@ -17,6 +21,10 @@ AMARILLO = (255,255,0)
 
 VENTANA = pygame.display.set_mode((WIDTH, HEIGHT))
 FUENTE = pygame.font.SysFont("Arial", 30)
+FUENTE_POKEMON1 = pygame.font.Font("recursos\Pokemon Hollow.ttf",30)
+FUENTE_POKEMON2 = pygame.font.Font("recursos\Pokemon Solid.ttf",30)
+
+
 
 def mostrar_texto(texto, fuente, color, x, y):
     img = fuente.render(texto, True, color)
@@ -25,7 +33,6 @@ def mostrar_texto(texto, fuente, color, x, y):
 def separar(entidad_a, entidad_b):   
     if not entidad_a.rect.colliderect(entidad_b.rect):
         return #si no hay colision no hace nada
-    
     #donde se superpone cada eje
     overlap_x = min(entidad_a.rect.right, entidad_b.rect.right) - max(entidad_a.rect.left, entidad_b.rect.left)
     overlap_y = min(entidad_a.rect.bottom, entidad_b.rect.bottom) - max(entidad_a.rect.top, entidad_b.rect.top)
@@ -53,3 +60,15 @@ def separar(entidad_a, entidad_b):
             
     entidad_a.rect.center = (entidad_a.x, entidad_a.y)
     entidad_b.rect.center = (entidad_b.x, entidad_b.y)
+
+    
+#con combinations, creas todas las combinaciones posibles de dos unidades y llamas separar con cada una
+def separar_todos(entidades):
+    for a, b in combinations(entidades, 2):
+        separar(a, b)
+
+#Distancia entre dos posiciones. Recibe dos tuplas de poscicion x,y y devuelve distancia 
+def distancia_entre_puntos(a,b):
+    dif_x = a[0] - b[0]
+    dif_y = a[1] - b[1]
+    return math.hypot(dif_x, dif_y)

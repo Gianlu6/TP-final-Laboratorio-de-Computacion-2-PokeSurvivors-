@@ -1,18 +1,20 @@
 import math
-from Clases_Abs import Entidad
+from Clases_Abs import SerVivo
 import pygame
 from constantes import *
+from sprites import *
+import random
 
-class Enemigo(Entidad):
-    cantidad = 0
-    
-    def __init__(self, vida, ataque, defensa, x, y, sprite, velocidad=2, intervalo=1500):
-        super().__init__(vida, ataque, defensa, x, y, sprite)
+
+class Enemigo(SerVivo):
+    def __init__(self, vida_max, ataque, defensa, x, y, image, grupo, velocidad=2):
+        super().__init__(vida_max, ataque, defensa, x, y, image, grupo)
         self.velocidad = velocidad
-        self.intervalo = intervalo
+        self.intervalo = 500
         self.ultimo_chequeo = 0
-        self.objetivo = (x, y)    
-        self.cantidad += 1
+        self.objetivo = (x, y)
+        self.vida = vida_max    
+        #self.cantidad += 1
         
     def atacar():
         pass
@@ -33,4 +35,22 @@ class Enemigo(Entidad):
         #chequea si la distancia es mayor a la velocidad para ir asi no hay mov raros
         if distancia > self.velocidad:
             self.moverse(dx / distancia * self.velocidad, dy / distancia * self.velocidad)
-        
+
+
+
+ultimo_spawn = 0
+enemigos = []
+
+def spawneo_enemigos(personaje, grupo):
+    global ultimo_spawn
+    ahora = pygame.time.get_ticks()
+    x = random.choice([0, WIDTH])
+    y = random.randint(0, HEIGHT)   
+    if len (enemigos) < 8 and ahora - ultimo_spawn >= 2000:
+        ultimo_spawn = ahora
+        enemigos.append(Enemigo(100, 50, 50, x, y, malo_sprite, grupo))
+
+    for enemigo in enemigos:
+        enemigo.avanzar(personaje)
+        separar(enemigo,personaje)
+    separar_todos(enemigos)
