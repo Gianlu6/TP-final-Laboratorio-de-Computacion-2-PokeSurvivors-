@@ -92,8 +92,7 @@ class Rayo (Movimiento):             #Impacto de rayos a enemigos random
                     self.mostrar_rayo(autor.buscar_pos(victima))
                     self.ultimo_ataque = self.t_ahora
                     self.timepo_rayo = self.t_ahora
-        if self.t_ahora - self.timepo_rayo >= 100:
-            self.borrar_rayo()
+        
 
     def mostrar_rayo(self,pos):
         self.image = self.rayo_image           #Mostrar sprite de rayo
@@ -102,6 +101,10 @@ class Rayo (Movimiento):             #Impacto de rayos a enemigos random
     def borrar_rayo (self):
         self.image = pygame.Surface((0,0)) #Dejamos el sprite Vacio
         self.rect = self.image.get_rect(center=(self.x,self.y))
+
+    def update(self):
+        if self.t_ahora - self.timepo_rayo >= 100:
+            self.borrar_rayo()
             
 class Placaje (Movimiento):     #Daño de contacto de personaje del tipo 'normal' para los que son inmunes al rayo
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):

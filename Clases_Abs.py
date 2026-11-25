@@ -1,6 +1,7 @@
 import pygame
 from abc import ABC, abstractmethod
 from constantes import *
+from BarraVida import *
 
 
 class Entidad(pygame.sprite.Sprite, ABC):
@@ -32,6 +33,7 @@ class SerVivo(Entidad):
             self.ataque = ataque
             self.defensa = defensa
             self.__tipo = tipo
+            self.grupo = grupo
             
             self.velocidad = velocidad
             self.image_original = self.image
@@ -67,6 +69,10 @@ class SerVivo(Entidad):
             else:
                 self.vida -= danio
                 self.recibir_danio()
+
+            #Aparicion de texto de danio
+            pos_texto_danio = (self.rect.centerx, self.rect.top - 15)
+            numerin=NumeroDanio(pos_texto_danio,danio, self.grupo)
 
     def curar_vida(self,curacion):
         if curacion+self.vida >= self.vida_max:
