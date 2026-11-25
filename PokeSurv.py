@@ -63,10 +63,10 @@ def main():
     
         prota.actualizar_posicion_armas()
 
-        camara_grupo.update()
+        camara_grupo.update()           #Dibujo masivo de sprites 
         
-        camara_grupo.dibujar_fondo()
-        camara_grupo.camara_centrada(prota)                #Grupo
+        camara_grupo.dibujar_fondo()                       #Dibujo de fondo pasto infinito    
+        camara_grupo.camara_centrada(prota)                #El camara_grupo mueve los sprites simulando un movimiento de camara
 
         # Limpiar proyectiles y enemigos muertos de las listas
         proyectiles[:] = [p for p in proyectiles if p.estoy_vivo]
@@ -76,6 +76,7 @@ def main():
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
+
         
         barra_prota.dibujar(VENTANA, prota.vida)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida
@@ -102,7 +103,6 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
 
 
 
-    #mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
     proyectiles = []
