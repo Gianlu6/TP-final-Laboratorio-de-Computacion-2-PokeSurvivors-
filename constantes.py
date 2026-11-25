@@ -92,13 +92,20 @@ def calculo_danio(emisor,destinatario,ataque_movimiento,tipo_movimiento):
     cuenta = ataque_movimiento*(emisor.ataque/destinatario.defensa)*mult_tipo*random.uniform(0.95,1.05)
     return cuenta
 
-#La multiplicacion de daño que hace Pikachu segun tipo:
+#La multiplicacion de daño que hace Pikachu segun tipo electrico:
 # x0 si el enemigo es Tierra (Inmune)
 # x2 si es Agua o Volador (debil a la electricidad)
 # x0.5 a Dragon, Eléctrico o planta
 # x1 al resto de los tipos
 
-#La multiplicacion del ataque del enemigo hacia Pikachu
+#La multiplicacion del ataque del enemigo hacia Pikachu tipo electrico
 # x2 de daño si lo ataca un tipo Tierra
 # x0.5 electrico, volador, acero
 # x1 el resto
+
+#Pikachu para pelear con los elementos inmunes como la tierra puede adquirir ataques del tipo normal:
+# x 0.5 De daño a roca y acero
+# x 0 De daño a tipo Fantasma
+# x1 En el resto
+
+#Cola Ferrea es de acero

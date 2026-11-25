@@ -32,8 +32,7 @@ class SerVivo(Entidad):
             self.ataque = ataque
             self.defensa = defensa
             self.tipo = tipo
-            #self.x = x
-            #self.y = y
+            
             self.velocidad = velocidad
             self.image_original = self.image
             self.tiempo_danio = 0               # -> Tiempo que pasó desde que se hizo daño (MILISEGUNDOS)

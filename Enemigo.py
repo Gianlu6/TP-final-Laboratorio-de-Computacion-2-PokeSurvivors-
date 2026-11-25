@@ -20,7 +20,6 @@ class Enemigo(SerVivo):
         if self.rect.colliderect(objetivo.rect):
             objetivo.quitar_vida(1)
 
-
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()
         
@@ -48,7 +47,7 @@ def spawneo_enemigos(personaje, grupo):
     ahora = pygame.time.get_ticks()
     x = random.choice([0, WIDTH])
     y = random.randint(0, HEIGHT)   
-    if len (enemigos) < 8 and ahora - ultimo_spawn >= 2000:
+    if len (enemigos) < 8 and ahora - ultimo_spawn >= 1000:
         ultimo_spawn = ahora
         enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
 

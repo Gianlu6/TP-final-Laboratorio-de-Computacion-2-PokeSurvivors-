@@ -38,18 +38,12 @@ class Proyectil(Entidad):
         self.rect.center = (self.x, self.y)
 
 #Base de ataques?
-#Rayo: Tiene mas daño que impactrueno
-#Impactrueno: rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
+#Rayo: Rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
 #Cola férrea, ataque normal para los de tierra (látigo de VS)
 #Placaje: Ataque normal, daño de contacto
-#Placaje eléctrico: Ataque eléctrico, daño de contacto (mas daño que rayo, deja estela de daño?)
-#Electro tela/red: escudo electrico (ajo VS)
 #Bola voltio: Protectil? Varita de fuego? El ataque sube en base a la velocidad
-#Mega-punch, headbutt: Normales
-#Volt Switch: Eléctrico. Pega y cambia, poco daño
-#Proyectiles?
 
-#Modificadores pasivos para evolucion
+#Proyectiles?
 
 #Enemigo. Ataques segun tipo (daño de contacto y proyectiles):
 #Fuego y agua: proyectiles, fuego hace mas daño, agua lanza mas proyectiles
@@ -60,27 +54,51 @@ class Proyectil(Entidad):
 # recibe stats del usuario (atq,def,tipo) 
 # y de su o sus target(lista enemigos)
 
-class Impactrueno (Movimiento):
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
-        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
+class Rayo (Movimiento):             #Impacto de rayos a enemigos random
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
+        self.ultimo_ataque = 0
+        self.image = pygame.Surface((0,0)) #Dejamos el sprite Vacio
+        self.rayo_image = sprite
 
-    def atacar(self):
+    def atacar(self, autor, objetivos):
+        self.t_ahora = pygame.time.get_ticks()
+        if self.t_ahora - self.ultimo_ataque >= self.tiempo_recarga and len(objetivos)!=0:
+            victima = objetivos[random.randint(0,len(objetivos)-1)]
+            victima.quitar_vida(self.ataque_base) #Dañar enemigo aleatorio
+            self.image = self.rayo_image
+            self.rect = self.image.get_rect(midbottom=autor.buscar_pos(victima))
+            self.ultimo_ataque = self.t_ahora
+            
+        #Mostrar sprite de rayo
+
+
+class Placaje (Movimiento):     #Daño de contacto de personaje del tipo 'normal' para los que son inmunes al rayo
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
+        self.ataque_base = ataque_base*0.5
+
+    def atacar(self, autor, objetivos):
+        super().atacar(autor, objetivos)       
+        for enemigo in objetivos:           
+            if autor.rect.colliderect(enemigo.rect):
+                        enemigo.quitar_vida(self.ataque_base)
+
+class ColaFerrea(Movimiento):               #Daño normal con un poco mas de distancia
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
+
+    def atacar(self, autor, objetivos):
+        super().atacar(autor, objetivos)
         pass
 
-class Placaje (Movimiento):     #Daño de contacto de personaje
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga):
-        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga)
-
-    def atacar(self):
-        pass
-
-class ElectroTela (Movimiento):     
+class ElectroTela (Movimiento):     #Area electrica que drena vida cada medio segundo. 
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga,rango):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga,rango)
         self.image = pygame.transform.scale_by(self.image,self.rango)
         self.rect = self.image.get_rect(center=(x, y))
         self.radius = self.rect.width //2.5 #Creacion de colicion circular
-
+        self.ataque_base = ataque_base*0.3
         self.ultimo_ataque = 0
     
     def atacar(self,autor,objetivos):
@@ -88,5 +106,5 @@ class ElectroTela (Movimiento):
         if self.t_ahora - self.ultimo_ataque > self.tiempo_recarga:
             for enemigo in objetivos:
                 if pygame.sprite.collide_circle(self, enemigo):
-                    enemigo.quitar_vida(autor.ataque*0.3)
+                    enemigo.quitar_vida(self.ataque_base)
             self.ultimo_ataque = self.t_ahora
