@@ -2,39 +2,33 @@ import pygame
 import random
 from constantes import *
 
-
-class MundoSprite(pygame.sprite.Sprite):                              #Clase que genera elementos en el mundo
-    def __init__(self, x, y, grupo):
+class Arbol(pygame.sprite.Sprite):
+    def __init__(self, x, y, grupo, imagen):
         super().__init__(grupo)
-        #self.x = x
-        #self.y = y
-        self.tamanio = 40
-
-        #Atributos obligatorios para el pygame.sprite.group
-        self.image = pygame.Surface((self.tamanio, self.tamanio))
-        self.image.fill(AZUL)
-        self.rect = self.image.get_rect(topleft=(x,y))
-
-   
-    def dibujar_Sprite(self, pantalla):         #Método para dibujarlos como un rectanngulo azul
-        pygame.draw.rect(pantalla, AZUL, 
-                         (self.x, self.y, self.tamanio, self.tamanio))
-
-
-class Mundo:                                #Clase mundo (en desuso)
-    def __init__(self, ancho, alto,grupo):
-        self.grupo = grupo
-        self.ancho = ancho
-        self.alto = alto
-        self.elemento_fondo = [MundoSprite(random.randint(0,ancho-40), 
-                                        random.randint(0,alto-40),self.grupo) for i in range (10)]
-        #Exprecion generadora de 10 elementos Sprites en ubicacion random dentro del rango de la pantalla
-        #Lista de clases mundoSprite con ubicaciones random dentro de el límite de la pantalla
-    
-
+        self.x = x
+        self.y = y
+        self.image = imagen
+        self.rect = self.image.get_rect(midbottom=(x, y))
+        
+def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=1, separacion=80, ):
+        imagen = pygame.image.load(ruta_imagen).convert_alpha()
+        if escala != 1:
+            imagen = pygame.transform.scale_by(imagen, escala)
+        arboles = []
+        intentos = 0
+        while len(arboles) < cantidad and intentos < cantidad * 20:
+            intentos += 1
+            x = random.randint(0, ancho_mundo)
+            y = random.randint(0, alto_mundo)
+            if all(abs(x - a.rect.centerx) > separacion or abs(y - a.rect.centery) > separacion
+                    for a in arboles):
+                arboles.append(Arbol(x, y, grupo, imagen))
+                
+        return arboles
+        
 
 class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara
-    def __init__(self):
+    def __init__(self, ruta_fondo=None):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
 
@@ -43,6 +37,26 @@ class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites p
         self.mitad_ancho = self.display_surface.get_size()[0] //2
         self.mitad_alto = self.display_surface.get_size()[1] //2
 
+        #fondo
+        self.fondo = None
+        if ruta_fondo:
+            self.set_fondo(ruta_fondo)
+
+    def set_fondo(self, ruta_fondo): #carga la imagen de suelo
+        self.fondo = pygame.image.load(ruta_fondo).convert()
+        self.fondo_ancho, self.fondo_alto = self.fondo.get_size()
+
+    def dibujar_fondo(self):
+        if self.fondo is None:
+            return
+        
+        pantalla_ancho, pantalla_alto = self.display_surface.get_size()
+        inicio_x = -(int(self.offset.x) % self.fondo_ancho)
+        inicio_y = -(int(self.offset.y) % self.fondo_alto)
+        
+        for x in range(inicio_x, pantalla_ancho, self.fondo_ancho):
+            for y in range(inicio_y, pantalla_alto, self.fondo_alto):
+                self.display_surface.blit(self.fondo, (x, y))
 
     def camara_centrada(self,target):                                              #Método que aplica una transformacion inversa al mundo en base a un target: el personaje
         self.offset.x = target.rect.centerx - self.mitad_ancho

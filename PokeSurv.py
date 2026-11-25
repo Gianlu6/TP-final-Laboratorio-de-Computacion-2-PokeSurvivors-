@@ -65,7 +65,7 @@ def main():
 
         camara_grupo.update()
         
-        VENTANA.fill((VERDE_OSCURO))                       #Color de Fondo 
+        camara_grupo.dibujar_fondo()
         camara_grupo.camara_centrada(prota)                #Grupo
 
         # Limpiar proyectiles y enemigos muertos de las listas
@@ -98,14 +98,14 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
     pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto "ventana" es la constante PANTALLA
 
     #Set camara
-    camara_grupo = GrupoCamara()        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
+    camara_grupo = GrupoCamara("pasto.jpg")        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
 
 
 
-    mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
+    #mi_mundo = Mundo(WIDTH, HEIGHT,camara_grupo)                                            #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
     proyectiles = []
-
+    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "Oak_Tree.png", 3)
 
     main()
