@@ -49,12 +49,14 @@ def main():
         # Limpiar enemigos muertos de las listas
         enemigos[:] = [e for e in enemigos if e.estoy_vivo]      
 
+
+
+
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-
         
-        barra_prota.dibujar(VENTANA, prota.vida)
+        barra_prota.dibujar(VENTANA, prota.vida, prota.vida_max)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON1, NEGRO, 200, 610)            #Muestra texto de la vida
         pygame.display.flip()           #Actualiza la pantalla
@@ -80,7 +82,7 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
 
 
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
-    barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
+    barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
     arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos\Oak_Tree.png", 3)
 
     main()

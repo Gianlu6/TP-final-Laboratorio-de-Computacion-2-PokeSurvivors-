@@ -14,11 +14,12 @@ class Personaje(SerVivo):
         self.rect.center = (x,y)
 
         #Instancia de los ataques
-        self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
-                        Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
-                        Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
-                        Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
- 
+        # self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
+        #                 Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
+        #                 Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
+        #                 Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
+
+        self.inventario = []
 
 
     def atacar(self, ene):

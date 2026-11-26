@@ -17,7 +17,7 @@ class Enemigo(SerVivo):
         
     def atacar(self,objetivo):
         if self.rect.colliderect(objetivo.rect):
-            objetivo.quitar_vida(1)
+            objetivo.quitar_vida(10)
 
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()

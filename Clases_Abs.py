@@ -15,6 +15,8 @@ class Entidad(pygame.sprite.Sprite, ABC):
         self.z = 1
         self.estoy_vivo = True
 
+    
+
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
         self.y += dy
@@ -28,7 +30,7 @@ class Entidad(pygame.sprite.Sprite, ABC):
 class SerVivo(Entidad):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, sprite, grupo,velocidad):    # x, y -> Coordenadas de posición
             super().__init__(x,y,sprite,grupo)         
-            self.vida_max = vida_max
+            self.__vida_max = vida_max
             self.__vida = vida_max 
             self.ataque = ataque
             self.defensa = defensa
@@ -42,7 +44,20 @@ class SerVivo(Entidad):
 
     #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
     #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
-        
+
+    @property 
+    def vida_max(self):
+        return self.__vida_max
+
+    @vida_max.setter        #Incremento o decremento de la vida_max afecta al porcentaje de vida proporcional
+    def vida_max(self,valor):
+        if valor>0:
+            proporcion = self.__vida / self.__vida_max
+            self.__vida_max = valor
+            self.__vida =  round(self.__vida_max*proporcion)        
+        #Si subis la vida maxima aumenta la vida, conservando su porcentaje proporcional 
+
+
     #El getter de vida se llama asi:
     #prota.vida 
     @property                   
