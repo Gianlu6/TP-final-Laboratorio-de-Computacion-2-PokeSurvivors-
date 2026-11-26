@@ -7,8 +7,10 @@ class Arbol(Entidad):
     def __init__(self, x, y, sprite, grupo):
         super().__init__(x,y,sprite,grupo)
         self.rect = self.image.get_rect(midbottom=(x, y))
+        self.hitbox = pygame.Rect(0, 0, 80, 100)
+        self.hitbox.midbottom = self.rect.midbottom
         
-def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=1, separacion=80):
+def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=3, separacion=80):
         imagen = pygame.image.load(ruta_imagen).convert_alpha()
         if escala != 1:
             imagen = pygame.transform.scale_by(imagen, escala)
@@ -24,7 +26,6 @@ def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escal
                 
         return arboles
         
-
 class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara
     def __init__(self, ruta_fondo=None):
         super().__init__()

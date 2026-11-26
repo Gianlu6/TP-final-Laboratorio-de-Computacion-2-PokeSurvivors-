@@ -50,8 +50,8 @@ def nueva_partida():
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
                       prota_sprite, camara_grupo, 1, VELOCIDAD_PERSONAJE)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
-    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos\Oak_Tree.png")
-    
+    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos/Oak_Tree.png")
+        
 def jugar():
     global juego_pausado
 
@@ -86,6 +86,11 @@ def jugar():
 
             for enemigo in enemigos:
                 enemigo.atacar(prota)
+                for arbol in arboles:
+                    colision_solida(enemigo, arbol)
+            
+            for arbol in arboles:
+                colision_solida(prota, arbol)          
 
             prota.atacar(enemigos)
             prota.actualizar_posicion_armas()
