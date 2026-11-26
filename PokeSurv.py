@@ -1,76 +1,88 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
-import time
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
-from Enemigo import Enemigo
-from Mundo import Mundo, MundoSprite        #Importarlo de esta manera evita un error de 'Modulo'
-
-#Inicialización de pygame
-pygame.init() 
-
-RELOJ = pygame.time.Clock()                                     #Tiempo del juego
-
-#Creación de ventana gráfica
-pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana
-
-#INICIALIZANDO SPRITES
-prota_sprite_load = pygame.image.load("main_pikachu.png").convert_alpha()
-prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
-malo_sprite_load = pygame.image.load("malo.jpg").convert_alpha()
-malo_sprite = pygame.transform.scale(malo_sprite_load, (100, 100))
-proyectil_sprite_load = pygame.image.load("proyectil.png").convert_alpha()
-proyectil_sprite = pygame.transform.scale(proyectil_sprite_load, (30, 30))
+from Enemigo import *
+from Mundo import *        #Importarlo de esta manera evita un error de 'Modulo'
+from Ataque import *
+from BarraVida import *
+from sprites import *
 
 #Creación de la función principal
 def main():
-    mi_mundo = Mundo(WIDTH, HEIGHT)           #Instancia de clase Mundo que abarca la resolucion de la pantalla (puede ser mas grande)
-    prota = Personaje(100, 50, 50, WIDTH//2, HEIGHT//2, prota_sprite)    #Instancia de personaje(Doble barra es división forzada a entero)
-    malo1 = Enemigo(100, 50, 50, WIDTH//4, HEIGHT//4, malo_sprite)
-    malo2 = Enemigo(100, 50, 50, WIDTH//6, HEIGHT//6, malo_sprite)
-
-    enemigos = [malo1, malo2]
-
     while True:                                                     #BUCLE DEL JUEGO
         for event in pygame.event.get():                            # Si clickeas la x de cerrar ventana, termina el programa
            if event.type == pygame.QUIT: 
                pygame.quit()                                        # Se quita el juego
-               sys.exit()                                           #Se mata la ejecución
+               sys.exit()                #Se mata la ejecución
 
+        #Input de teclas
         tecla = pygame.key.get_pressed()                            # Espera tecla del jugador
         if tecla[pygame.K_LEFT]:                                    # Analiza la tecla del jugador
-            prota.moverse(-VELOCIDAD_PERSONAJE, 0)                                     # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
+            prota.moverse(-prota.velocidad, 0)                      # Teclear con las flechas mueve al personaje en eje 'x' e 'y'
         if tecla[pygame.K_RIGHT]:
-            prota.moverse(VELOCIDAD_PERSONAJE, 0)
+            prota.moverse(prota.velocidad, 0)
         if tecla[pygame.K_UP]:
-            prota.moverse(0, -VELOCIDAD_PERSONAJE)                             #EN PYGAME EL EJE 'Y' HACIA ARRIBA ES NEGATIVO
+            prota.moverse(0, -prota.velocidad)                             #EN PYGAME EL EJE 'Y' HACIA ARRIBA ES NEGATIVO
         if tecla[pygame.K_DOWN]:
-            prota.moverse(0, VELOCIDAD_PERSONAJE)
+            prota.moverse(0, prota.velocidad)
+        
+        #Funcion que crea y agrega enemigos a la lista hasta un limite
+        spawneo_enemigos(prota,camara_grupo)
 
 
-        mi_mundo.dibujar_mundo(VENTANA)
-        mostrar_texto(f"{prota.vida}", FUENTE, NEGRO, 1000, 600)
-        prota.dibujar()      
-       
+        
+        #chequea colisiones con enemigos y te hace daño
         for enemigo in enemigos:
-            enemigo.avanzar(prota)#EL ORDEN IMPORTA, PRIMERO DIBUJAR EL MUNDO Y ARRIBA DE ESO EL/LOS PERSONAJE/S
-            enemigo.dibujar()
-            separar(malo1, malo2) #TEMPORAL HASTA QUE VEAMOS QUE ONDA
-            separar(prota, enemigo)
-                    
-            #chequea colisiones con enemigos y te hace daño
-            if prota.rect.colliderect(enemigo.rect):
-                prota.vida -= 3
-                
+            enemigo.atacar(prota)
+
+        prota.atacar(enemigos)
+    
+        prota.actualizar_posicion_armas()
+
+        camara_grupo.update()           #Dibujo masivo de sprites 
+        
+        camara_grupo.dibujar_fondo()                       #Dibujo de fondo pasto infinito    
+        camara_grupo.camara_centrada(prota)                #El camara_grupo mueve los sprites simulando un movimiento de camara
+
+        # Limpiar enemigos muertos de las listas
+        enemigos[:] = [e for e in enemigos if e.estoy_vivo]      
+
+
+
+
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
             break
-            
-       
+        
+        barra_prota.dibujar(VENTANA, prota.vida, prota.vida_max)
+        mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)            #Muestra texto de la vida
+        mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON1, NEGRO, 200, 610)            #Muestra texto de la vida
         pygame.display.flip()           #Actualiza la pantalla
         RELOJ.tick(60)                  #Limita el reloj a 60 fps o una velocidad mas "humana"
 
 
+
+
+
+
 if __name__ =='__main__':               #Llamada al main() para ejecutar código principal
+    #Inicialización de pygame
+    pygame.init() 
+
+    RELOJ = pygame.time.Clock()                                     #Tiempo del juego
+
+    #Creación de ventana gráfica
+    pygame.display.set_caption("Pokemon Survivor")      #Nombre de ventana el objeto "ventana" es la constante PANTALLA
+
+    #Set camara
+    camara_grupo = GrupoCamara("recursos\pasto.jpg")        #GRUPO DE CAMARA: para que se mueva la "camara" (no existe en realida movemos y dibujamos masivamente el mundo con la transformacion inversa del personaje)
+
+
+
+    prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
+    barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
+    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos\Oak_Tree.png", 3)
+
     main()
