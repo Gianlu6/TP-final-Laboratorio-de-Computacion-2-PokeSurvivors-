@@ -15,28 +15,12 @@ class Personaje(SerVivo):
 
         #Instancia de los ataques
         self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
-                           Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
-                           Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1)]
-        
+                        Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
+                        Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
+                        Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
+ 
 
 
-        self.contador = 0 #PROYECTILES
-
-
-
-        
-    # def atacar(self,ene):    
-    #     self.contador+=1
-
-    #     if self.contador < 30 or not ene:
-    #         return None
-    #     else:
-    #         self.contador = 0
-    #         pos_x,pos_y = self.buscar_pos(ene[0])
-    #         return Proyectil(rayo_sprite,self.x, self.y, pos_x, pos_y, self.grupo,1000)
-    #el personaje recibe un diccionario con todos los enemigos presentes como claves y 
-    #sus posiciones relativas al personaje como valores y quien tenga la menor de ellas
-    #sera al que ataque.
     def atacar(self, ene):
         for movimiento in self.inventario:
             movimiento.atacar(self,enemigos)

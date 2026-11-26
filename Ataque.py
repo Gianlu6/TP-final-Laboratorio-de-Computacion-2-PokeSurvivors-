@@ -4,39 +4,6 @@ from sprites import *
 from Clases_Abs import *
 from constantes import *
 
-# ---------- PROYECTILES ----------
-class Proyectil(Entidad):
-    def __init__(self, image, x, y, objetivo_x, objetivo_y,  grupo, rango, velocidad=7):
-        super().__init__(x, y, image, grupo) 
-
-        #Calculo del angulo apuntando al enemigo (SOH - CAH - TOA)
-        angulo = math.atan2(objetivo_y - y, objetivo_x - x)
-        self.vx = math.cos(angulo) * velocidad
-        self.vy = math.sin(angulo) * velocidad
-        
-        self.ataque = 100
-        self.rango = rango
-        self.image = pygame.Surface((12, 12))
-        self.image.fill(AMARILLO)
-        self.rect = self.image.get_rect(center=(x, y))
-        self.estoy_vivo = True
-
-    def avanzar(self):
-        self.moverse(self.vx, self.vy)
-        #if self.x < 0 or self.y < 0:
-        #    self.estoy_vivo = False
-
-
-    def atacar(self, vida_enemigo, defensa_enemigo):
-        danio = max(1, self.ataque - defensa_enemigo)
-        self.estoy_vivo = False
-        return danio
-
-    def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
-        self.x += dx
-        self.y += dy
-        self.rect.center = (self.x, self.y)
-
 #Base de ataques?
 #Rayo: Rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
 #Cola férrea, ataque normal para los de tierra (látigo de VS)
@@ -50,17 +17,74 @@ class Proyectil(Entidad):
 #Lucha, acero, roca: Daño por contacto, mínimo pero varios por segundo en lucha y acero hace mas daño pero el cooldown es mas largo
 #Tierra: daño de contacto o area con terremotos
 
-#atacar revisa el cooldown, 
-# recibe stats del usuario (atq,def,tipo) 
-# y de su o sus target(lista enemigos)
+# ---------- PROYECTILES ----------
+class Proyectiles(Entidad):
+    def __init__(self, x, y, sprite, grupo,objetivo,velocidad):
+        super().__init__(x, y, sprite, grupo)
+        #Calculo del angulo apuntando al enemigo y cuanto tiene que moverse (SOH - CAH - TOA)
+        self.velocidad = velocidad
+        self.angulo = math.atan2(objetivo.y - y, objetivo.x - x)
+        self.vx = math.cos(self.angulo) * self.velocidad
+        self.vy = math.sin(self.angulo) * self.velocidad
+
+        #Ajustar rotacion del sprite
+        self.image = pygame.transform.rotate(self.image, -math.degrees(self.angulo)) #El rompepelotas de pygame quiere los grados en grados y el angulo se calculo en radianes pipipi
+        self.rect = self.image.get_rect(center=(x, y))
+
+    def moverse (self): #Recibe parámetros de cuanto hay que moverse
+        self.x += self.vx
+        self.y += self.vy
+        self.rect.center = (self.x, self.y)
+
 class Chispitas (Movimiento):
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
+    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango, velocidad):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
-
+        self.velocidad = velocidad*5
+        self.proyectiles = []
+        self.tiempo_disparo = 0
+        self.ataque_base *= 0.3
+        self.sprite_original = self.image
+        self.image = pygame.Surface((0,0)) #Dejamos el sprite Vacio
+        
+    #Pasado el tiempo de recarga, crea el proyectil 
+    #Este proyectil tiene asignado un enemigo target: el que este mas cerca en el momento de la creacion
+    #Durante el ciclo de atacar constante, fuera del tiempo de recarga o en el .update los proyectiles se moveran hacia su target
+    #Los proyectiles mueren pasado un rango (rango, pj*1000)
+    #Los proyectiles se mueves y si colicionan con un enemigo de la lista quitan vida y mueren
     def atacar(self, autor, objetivos):
-        super().atacar(autor, objetivos)
-        pass
+        if len(objetivos)!=0:
+            if pygame.time.get_ticks() - self.tiempo_disparo >= self.tiempo_recarga: #Creacion de proyectiles segun tiempo recarga
+                dist_mas_cercana = self.rango
+                victima = None
+                for enemigo in objetivos:
+                    if distancia_entre_puntos(autor.posicion(),enemigo.posicion()) < dist_mas_cercana:    #Calculo del enemigo mas cercano
+                        dist_mas_cercana = distancia_entre_puntos(autor.posicion(),enemigo.posicion())
+                        victima = enemigo
+                #Disparo a enemigo
+                if victima is not None:
+                    self.proyectiles.append(Proyectiles(autor.x, autor.y,self.sprite_original,autor.grupo,victima,self.velocidad))
+                    self.tiempo_disparo = pygame.time.get_ticks()
+       
+        #Movimiento constante de proyectiles
+            if len(self.proyectiles)!=0:    
+                for proyectil in self.proyectiles:
+                    proyectil.moverse()
+                    #Deteccion de colicion o limite de rango
+                    if distancia_entre_puntos(proyectil.posicion(),autor.posicion()) > self.rango:  #Los proyectiles mueren pasado su rango
+                        proyectil.estoy_vivo = False
+                        proyectil.kill()        #Kill las saca del sprite group para que no se renderice mas
+                        continue
 
+                    for enemigo in objetivos:
+                        if proyectil.estoy_vivo and proyectil.rect.colliderect(enemigo.rect):
+                            enemigo.quitar_vida(self.ataque_base)
+                            proyectil.estoy_vivo = False
+                            proyectil.kill()
+    def update(self):
+        self.proyectiles[:] = [p for p in self.proyectiles if p.estoy_vivo]     
+        #En la actualizacion borro los proyectiles que murieron de la lista de proyectiles activos
+        #NOTA: Uso de slicing por la mutabilidad de la lista (asignar normalmente no reeplaza datos sino que apunta a misma direccion de memoria)
+                
 class ColaFerrea(Movimiento):               #Daño normal con un poco mas de distancia
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)

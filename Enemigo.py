@@ -9,7 +9,6 @@ import random
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
         super().__init__(vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad)
-        self.velocidad = velocidad
         self.intervalo = 500
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)

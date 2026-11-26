@@ -100,7 +100,7 @@ class SerVivo(Entidad):
 
         
         
-    @abstractmethod
+    @abstractmethod             
     def atacar(self, vida_enemigo, defensa_enemigo):
         pass
     
@@ -115,11 +115,11 @@ class Movimiento(Entidad):
         super().__init__(x, y, sprite, grupo)
         self.ataque_base = ataque_base
         self.tiempo_recarga = tiempo_recarga
-        self.offset_x = 0       #Por defecto en 0 pero si hay un Movimiento que siga al personaje, se desplaza para que no tape al personaje
+        self.offset_x = 0       #Por defecto en 0 pero si hay un Movimiento/Ataque que siga al personaje, se desplaza para que no tape al personaje
         self.offset_y = 0
         self.z = 0
         self.rango = rango
 
-    @abstractmethod
+    @abstractmethod                     #Cada ataque ES distinto 
     def atacar(self,autor,objetivos):
         pass

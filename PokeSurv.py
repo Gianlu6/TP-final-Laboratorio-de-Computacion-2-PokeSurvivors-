@@ -36,28 +36,6 @@ def main():
         #chequea colisiones con enemigos y te hace daño
         for enemigo in enemigos:
             enemigo.atacar(prota)
-            
-
-
-        # disparo = prota.atacar(enemigos)
-        # if disparo is not None:
-        #     proyectiles.append(disparo)
-
-        # for p in proyectiles:
-        #     p.avanzar()
-        #     if distancia_entre_puntos(p.posicion(), prota.posicion()) > p.rango: #Los proyectiles mueren pasado su rango
-                
-        #         p.estoy_vivo = False
-        #         p.kill()        #Kill las saca del sprite group para que no se renderice mas
-        #         continue
-        #     for enemigo in enemigos:
-        #         if p.estoy_vivo and p.rect.colliderect(enemigo.rect):
-        #             enemigo.quitar_vida(p.atacar(enemigo.vida, enemigo.defensa))
-        #             p.estoy_vivo = False
-        #             p.kill()                #Tambien mueren los proyectiles cuando impactan a un enemigo
-        #         if enemigo.vida <=0:
-        #             enemigo.estoy_vivo = False
-        #             enemigo.kill()
 
         prota.atacar(enemigos)
     
@@ -68,10 +46,8 @@ def main():
         camara_grupo.dibujar_fondo()                       #Dibujo de fondo pasto infinito    
         camara_grupo.camara_centrada(prota)                #El camara_grupo mueve los sprites simulando un movimiento de camara
 
-        # Limpiar proyectiles y enemigos muertos de las listas
-        proyectiles[:] = [p for p in proyectiles if p.estoy_vivo]
+        # Limpiar enemigos muertos de las listas
         enemigos[:] = [e for e in enemigos if e.estoy_vivo]      
-
 
         #TEMPORAL. Si moris se cierra el juego
         if prota.vida <= 0:
@@ -105,7 +81,6 @@ if __name__ =='__main__':               #Llamada al main() para ejecutar código
 
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2, prota_sprite, camara_grupo, 1,VELOCIDAD_PERSONAJE)    #Instancia de personaje(Doble barra es división forzada a entero)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida)
-    proyectiles = []
     arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos\Oak_Tree.png", 3)
 
     main()
