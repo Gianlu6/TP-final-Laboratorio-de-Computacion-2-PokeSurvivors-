@@ -4,7 +4,6 @@ import math
 import random
 from itertools import combinations
 
-
 pygame.font.init()
 
 WIDTH, HEIGHT = 1080, 720    
@@ -110,3 +109,8 @@ def calculo_danio(emisor,destinatario,ataque_movimiento,tipo_movimiento):
 # x1 En el resto
 
 #Cola Ferrea es de acero
+
+class RecursoError(Exception):
+    def __init__(self, mensaje="Hubo un error al cargar este recurso."):
+        super().__init__(mensaje)
+        
