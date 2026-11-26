@@ -1,5 +1,5 @@
 #Resolución
-import pygame
+import pygame, sys
 import math
 import random
 from itertools import combinations

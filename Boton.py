@@ -1,4 +1,4 @@
-import pygame 
+import pygame, sys
 from constantes import *
 
 fuente = pygame.font.SysFont("arialblack", 40)
@@ -30,4 +30,3 @@ class Boton():
         superficie.blit(self.imagen, (self.rect.x, self.rect.y))
         
         return accion
-                
