@@ -32,18 +32,46 @@ class SerVivo(Entidad):
             super().__init__(x,y,sprite,grupo)         
             self.__vida_max = vida_max
             self.__vida = vida_max 
-            self.ataque = ataque
-            self.defensa = defensa
+            self.__ataque = ataque
+            self.__defensa = defensa
             self.__tipo = tipo
             self.grupo = grupo
             
-            self.velocidad = velocidad
-            self.image_original = self.image
+            self.__velocidad = velocidad
+            self.image_original = self.image       #Necesito guardar la imagen original para que vuelva al estado normal de haberse teñido de rojo de recibir daño
             self.tiempo_danio = 0               # -> Tiempo que pasó desde que se hizo daño (MILISEGUNDOS)
-            self.invulnerabilidad = 250           # -> Tiempo el cual no deberia recibir daño aunque se acierte el ataque (MILISEGUNDOS)
+            self.__invulnerabilidad = 250           # -> Tiempo el cual no deberia recibir daño aunque se acierte el ataque (MILISEGUNDOS)
 
     #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
     #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
+
+    @property
+    def ataque(self):
+        return self.__ataque
+
+    @ataque.setter
+    def ataque (self,valor):                
+        if isinstance(valor, (int, float)) and valor > 0:       #Valida que sea un numero y mayor a cero
+            self.__ataque = valor
+
+    @property
+    def defensa(self):
+        return self.__defensa
+
+    @defensa.setter
+    def defensa (self,valor):
+            if isinstance(valor, (int, float)) and valor > 0:
+                  self.__defensa = valor
+
+    @property
+    def velocidad(self):
+        return self.__velocidad
+
+    @velocidad.setter
+    def velocidad (self,valor):
+        if isinstance(valor, (int, float)) and valor >= 0:
+              self.__velocidad = valor
+        
 
     @property 
     def vida_max(self):
@@ -51,7 +79,7 @@ class SerVivo(Entidad):
 
     @vida_max.setter        #Incremento o decremento de la vida_max afecta al porcentaje de vida proporcional
     def vida_max(self,valor):
-        if valor>0:
+        if isinstance(valor, (int, float)) and valor>0:
             proporcion = self.__vida / self.__vida_max
             self.__vida_max = valor
             self.__vida =  round(self.__vida_max*proporcion)        
@@ -71,12 +99,12 @@ class SerVivo(Entidad):
     # prota.vida = valor          
     @vida.setter                  # <-- Setter tanto de curacion como de danio                
     def vida(self, valor):
-        if valor >= 0 and valor <= self.vida_max:
+        if isinstance(valor, (int, float)) and valor >= 0 and valor <= self.vida_max:
             self.__vida = valor
 
 
     def quitar_vida(self, danio):
-        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.__invulnerabilidad:
             if danio >= self.vida:
                 self.vida = 0
                 self.estoy_vivo = False
@@ -103,7 +131,7 @@ class SerVivo(Entidad):
 
     def update(self):                                                               #Metodo que se llama en grupo_camara en el bucle para actualizar sprites. 
         # Pasados ciertos segundos vuelve la imagen de rojo daño a la original
-        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.__invulnerabilidad:
             self.image = self.image_original
             self.tiempo_danio = 0
 

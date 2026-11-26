@@ -5,9 +5,7 @@ from Clases_Abs import *
 from constantes import *
 
 #Base de ataques?
-#Rayo: Rayos caen aleatoreamente a los enemigos (anillo de relámpago de VS)
 #Cola férrea, ataque normal para los de tierra (látigo de VS)
-#Placaje: Ataque normal, daño de contacto
 #Bola voltio: Protectil? Varita de fuego? El ataque sube en base a la velocidad
 
 #Proyectiles?
@@ -36,6 +34,8 @@ class Proyectiles(Entidad):
         self.y += self.vy
         self.rect.center = (self.x, self.y)
 
+
+#--------------------------------------Ataques---------------------------------------------
 class Chispitas (Movimiento):
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango, velocidad):
         super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
@@ -84,14 +84,6 @@ class Chispitas (Movimiento):
         self.proyectiles[:] = [p for p in self.proyectiles if p.estoy_vivo]     
         #En la actualizacion borro los proyectiles que murieron de la lista de proyectiles activos
         #NOTA: Uso de slicing por la mutabilidad de la lista (asignar normalmente no reeplaza datos sino que apunta a misma direccion de memoria)
-                
-class ColaFerrea(Movimiento):               #Daño normal con un poco mas de distancia
-    def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
-        super().__init__(x, y, sprite, grupo, ataque_base, tiempo_recarga, rango)
-
-    def atacar(self, autor, objetivos):
-        super().atacar(autor, objetivos)
-        pass
 
 class Rayo (Movimiento):             #Impacto de rayos a enemigos random
     def __init__(self, x, y, sprite, grupo, ataque_base, tiempo_recarga, rango):
