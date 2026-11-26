@@ -1,16 +1,14 @@
 import pygame
 import random
 from constantes import *
+from Clases_Abs import *
 
-class Arbol(pygame.sprite.Sprite):
-    def __init__(self, x, y, grupo, imagen):
-        super().__init__(grupo)
-        self.x = x
-        self.y = y
-        self.image = imagen
+class Arbol(Entidad):
+    def __init__(self, x, y, sprite, grupo):
+        super().__init__(x,y,sprite,grupo)
         self.rect = self.image.get_rect(midbottom=(x, y))
         
-def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=1, separacion=80, ):
+def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=1, separacion=80):
         imagen = pygame.image.load(ruta_imagen).convert_alpha()
         if escala != 1:
             imagen = pygame.transform.scale_by(imagen, escala)
@@ -22,7 +20,7 @@ def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escal
             y = random.randint(0, alto_mundo)
             if all(abs(x - a.rect.centerx) > separacion or abs(y - a.rect.centery) > separacion
                     for a in arboles):
-                arboles.append(Arbol(x, y, grupo, imagen))
+                arboles.append(Arbol(x, y,imagen,grupo))
                 
         return arboles
         
