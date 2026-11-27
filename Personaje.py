@@ -9,8 +9,11 @@ class Personaje(SerVivo):
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         self.rango = rango
         self.grupo = grupo
-        
-        self.rect = self.rect.inflate(-50, -50)
+
+        self.image_original = self.image
+        self.image_invertida = pygame.transform.flip(self.image_original, True, False)
+        self.is_derecha = False
+        self.rect = self.rect.inflate(-55, -55)
         self.rect.center = (x,y)
 
         #Instancia de los ataques
@@ -19,10 +22,8 @@ class Personaje(SerVivo):
                          Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
                          Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
 
-        #self.inventario = []
 
-
-    def atacar(self, ene):
+    def atacar(self):
         for movimiento in self.inventario:
             movimiento.atacar(self,enemigos)
 
@@ -32,3 +33,21 @@ class Personaje(SerVivo):
                 dx = (self.x + movimiento.offset_x) - movimiento.x
                 dy = (self.y + movimiento.offset_y) - movimiento.y
                 movimiento.moverse(dx, dy)
+
+    def subir_stats(self,incrementador):
+        #Ataque,def,velocidad,rango,recarga,vida_max
+        #Tiempo_recarga vs invulnerabilidad
+        #Rango modifica la colicion y la imagen
+        #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
+        pass
+
+    #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
+    def update(self):
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+            self.image = self.image_original
+            self.tiempo_danio = 0
+            if self.is_derecha:
+                self.image = self.image_original
+            else:
+                self.image = self.image_invertida
+    

@@ -18,8 +18,10 @@ menu_start = pygame.image.load("sprites/menu_start.png").convert_alpha()
 menu_quit = pygame.image.load("sprites/menu_quit.png").convert_alpha()
 
 #crear botones
-boton_start = Boton(450, 260, menu_start, 5)
-boton_quit = Boton(365, 60, menu_quit, 5)
+boton_start = Boton(425, 260, menu_start, 5)
+boton_quit = Boton(425, 360, menu_quit, 5)
+
+arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 
 def menu_principal():
     while True:
@@ -42,19 +44,19 @@ def menu_principal():
 
 
 def nueva_partida():
-    global camara_grupo, prota, barra_prota, arboles, juego_pausado
+    global camara_grupo, prota, barra_prota, juego_pausado
     
     juego_pausado = False
+    reiniciar_arboles()
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
                       prota_sprite, camara_grupo, 1, VELOCIDAD_PERSONAJE)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
-    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos/Oak_Tree.png")
-        
+            
 def jugar():
     global juego_pausado
-
+    Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -75,24 +77,30 @@ def jugar():
             tecla = pygame.key.get_pressed()
             if tecla[pygame.K_LEFT]:
                 prota.moverse(-prota.velocidad, 0)
+                prota.is_derecha = True
             if tecla[pygame.K_RIGHT]:
                 prota.moverse(prota.velocidad, 0)
+                prota.is_derecha = False
             if tecla[pygame.K_UP]:
                 prota.moverse(0, -prota.velocidad)
             if tecla[pygame.K_DOWN]:
                 prota.moverse(0, prota.velocidad)
 
-            spawneo_enemigos(prota, camara_grupo)
+            actualizar_arboles(prota, camara_grupo, arbol_img)
 
+            spawneo_enemigos(prota, camara_grupo)
+            
+            arboles = arboles_cercanos(prota)
+            
             for enemigo in enemigos:
                 enemigo.atacar(prota)
                 for arbol in arboles:
                     colision_solida(enemigo, arbol)
-            
+                
             for arbol in arboles:
-                colision_solida(prota, arbol)          
-
-            prota.atacar(enemigos)
+                colision_solida(prota, arbol) 
+            
+            prota.atacar()
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
