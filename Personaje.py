@@ -23,7 +23,7 @@ class Personaje(SerVivo):
                          Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
 
 
-    def atacar(self, ene):
+    def atacar(self):
         for movimiento in self.inventario:
             movimiento.atacar(self,enemigos)
 
