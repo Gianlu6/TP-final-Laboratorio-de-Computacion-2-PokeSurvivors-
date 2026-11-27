@@ -21,10 +21,9 @@ class Personaje(SerVivo):
 
         #self.inventario = []
 
-
-    def atacar(self, ene):
+    def atacar(self):
         for movimiento in self.inventario:
-            movimiento.atacar(self,enemigos)
+            movimiento.atacar(self, enemigos)
 
     def actualizar_posicion_armas(self):    #Refresca pocicion de ataques que siguen a personaje y se desfasan por separacion
         for movimiento in self.inventario:

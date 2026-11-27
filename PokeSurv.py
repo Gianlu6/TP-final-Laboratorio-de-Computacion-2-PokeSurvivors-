@@ -23,6 +23,8 @@ boton_quit = Boton(425, 360, menu_quit, 5)
 
 arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 
+contador_muertes = 0
+
 def menu_principal():
     while True:
         for event in pygame.event.get():
@@ -42,7 +44,6 @@ def menu_principal():
         pygame.display.flip()
         RELOJ.tick(60)
 
-
 def nueva_partida():
     global camara_grupo, prota, barra_prota, juego_pausado
     
@@ -55,7 +56,7 @@ def nueva_partida():
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
             
 def jugar():
-    global juego_pausado
+    global juego_pausado, contador_muertes
 
     while True:
         for event in pygame.event.get():
@@ -98,11 +99,14 @@ def jugar():
             for arbol in arboles:
                 colision_solida(prota, arbol) 
             
-            prota.atacar(enemigos)
+            prota.atacar()
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
-            enemigos[:] = [e for e in enemigos if e.estoy_vivo]
+            for enemigo in enemigos:
+                if enemigo.vida <= 0:
+                    contador_muertes += 1
+                    enemigos.remove(enemigo)
 
             if prota.vida <= 0:
                 return                      # murió: vuelve a main()
@@ -112,6 +116,7 @@ def jugar():
         barra_prota.dibujar(VENTANA, prota.vida, prota.vida_max)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON2, AMARILLO, 200, 610)
         mostrar_texto(f"{prota.vida}/{prota.vida_max}", FUENTE_POKEMON1, NEGRO, 200, 610)
+        mostrar_texto(f"{contador_muertes}", FUENTE_POKEMON2, NEGRO, 100, 100)
 
         if juego_pausado:
             boton_start.dibujar(VENTANA)

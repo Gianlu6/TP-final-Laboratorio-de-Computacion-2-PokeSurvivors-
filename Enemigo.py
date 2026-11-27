@@ -5,7 +5,6 @@ from constantes import *
 from sprites import *
 import random
 
-
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
         super().__init__(vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad)
@@ -13,7 +12,6 @@ class Enemigo(SerVivo):
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
-        
         
     def atacar(self,objetivo):
         if self.rect.colliderect(objetivo.rect):
@@ -57,7 +55,6 @@ class Enemigo(SerVivo):
             texto_offset_y = self.y - offset.y + 10        
             mostrar_texto(f"{self.vida}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
                     
-
 ultimo_spawn = 0
 enemigos = []
 
@@ -82,4 +79,5 @@ def spawneo_enemigos(personaje, grupo):
     for enemigo in enemigos:
         enemigo.avanzar(personaje)
         colision_empuje(enemigo,personaje)
+            
     colision_todos(enemigos)

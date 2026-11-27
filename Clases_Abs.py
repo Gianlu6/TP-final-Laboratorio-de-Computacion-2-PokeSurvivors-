@@ -15,8 +15,6 @@ class Entidad(pygame.sprite.Sprite, ABC):
         self.z = 1
         self.estoy_vivo = True
 
-    
-
     def moverse (self, dx, dy): #Recibe parámetros de cuanto hay que moverse
         self.x += dx
         self.y += dy
@@ -102,7 +100,6 @@ class SerVivo(Entidad):
         if isinstance(valor, (int, float)) and valor >= 0 and valor <= self.vida_max:
             self.__vida = valor
 
-
     def quitar_vida(self, danio):
         if pygame.time.get_ticks() - self.tiempo_danio >= self.__invulnerabilidad:
             if danio >= self.vida:
@@ -140,9 +137,6 @@ class SerVivo(Entidad):
     def tipo(self):
         return self.__tipo
 
-
-        
-        
     @abstractmethod             
     def atacar(self, vida_enemigo, defensa_enemigo):
         pass

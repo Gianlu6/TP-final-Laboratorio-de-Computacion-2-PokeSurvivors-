@@ -14,8 +14,6 @@ class BarraVida():
         pygame.draw.rect(superficie, ROJO, (self.x, self.y, self.w, self.h))
         pygame.draw.rect(superficie, VERDE, (self.x, self.y, self.w * ratio, self.h))
 
-
-
 class NumeroDanio (pygame.sprite.Sprite):
     def __init__(self, pos, valor,grupo):
         super().__init__(grupo)
