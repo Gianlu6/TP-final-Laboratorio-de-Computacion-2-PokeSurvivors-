@@ -10,7 +10,7 @@ class Personaje(SerVivo):
         self.rango = rango
         self.grupo = grupo
         
-        self.rect = self.rect.inflate(-50, -50)
+        self.rect = self.rect.inflate(-55, -55)
         self.rect.center = (x,y)
 
         #Instancia de los ataques
