@@ -5,6 +5,9 @@ from constantes import *
 from sprites import *
 import random
 
+ultimo_spawn = 0
+enemigos = []
+Inicio_De_Tanda = 0
 
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
@@ -56,20 +59,18 @@ class Enemigo(SerVivo):
             texto_offset_x = self.x - offset.x - (self.image.get_width()//2)
             texto_offset_y = self.y - offset.y + 10        
             mostrar_texto(f"{self.vida}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
-                    
 
-ultimo_spawn = 0
-enemigos = []
-Inicio_De_Tanda = 0
+
+
+def actualizar_tanda_enemigos():
+    pass
 
 def spawneo_enemigos(personaje, grupo):
     global ultimo_spawn
     global Inicio_De_Tanda
     tiempo_de_Tanda = pygame.time.get_ticks()
     if tiempo_de_Tanda - Inicio_De_Tanda > 60000:    #¿Paso un minuto?    
-
-
-        
+        actualizar_tanda_enemigos()
         Inicio_De_Tanda = tiempo_de_Tanda
     else:
         ahora = pygame.time.get_ticks()

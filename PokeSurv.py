@@ -55,7 +55,7 @@ def nueva_partida():
             
 def jugar():
     global juego_pausado
-    Inicio_De_Tanda = pygame.time.get_ticks()
+    Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
