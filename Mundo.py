@@ -3,28 +3,67 @@ import random
 from constantes import *
 from Clases_Abs import *
 
+CHUNK_SIZE = 600
+ARBOLES_POR_CHUNK = 5
+RADIO_CHUNKS = 2
+SEPARACION = 80
+
+chunks_arboles = {}
+
 class Arbol(Entidad):
     def __init__(self, x, y, sprite, grupo):
         super().__init__(x,y,sprite,grupo)
         self.rect = self.image.get_rect(midbottom=(x, y))
         self.hitbox = pygame.Rect(0, 0, 80, 100)
         self.hitbox.midbottom = self.rect.midbottom
+
+def cargar_imagen_arbol(ruta_imagen, escala=3):
+    imagen = pygame.image.load(ruta_imagen).convert_alpha()
+    if escala != 1:
+        imagen = pygame.transform.scale_by(imagen, escala)
+    return imagen
+
+def generar_chunk_arboles(cx, cy, grupo, imagen):
+    rng = random.Random(f"{cx}, {cy}") #siempre el mismo chunk para la misma semilla
+    margen = SEPARACION // 2
+    arboles = []
+    posiciones = []
+    intentos = 0
+    
+    while len(arboles) < ARBOLES_POR_CHUNK and intentos < ARBOLES_POR_CHUNK * 20:
+        intentos += 1
+        x = cx * CHUNK_SIZE + rng.randint(margen, CHUNK_SIZE - margen)
+        y = cy * CHUNK_SIZE + rng.randint(margen, CHUNK_SIZE - margen)
         
-def generar_arboles(grupo, cantidad, ancho_mundo, alto_mundo, ruta_imagen, escala=3, separacion=80):
-        imagen = pygame.image.load(ruta_imagen).convert_alpha()
-        if escala != 1:
-            imagen = pygame.transform.scale_by(imagen, escala)
-        arboles = []
-        intentos = 0
-        while len(arboles) < cantidad and intentos < cantidad * 20:
-            intentos += 1
-            x = random.randint(0, ancho_mundo)
-            y = random.randint(0, alto_mundo)
-            if all(abs(x - a.rect.centerx) > separacion or abs(y - a.rect.centery) > separacion
-                    for a in arboles):
-                arboles.append(Arbol(x, y,imagen,grupo))
+        if all(abs(x - px) > SEPARACION or abs(y - py) > SEPARACION for px, py in posiciones): 
+            posiciones.append((x, y))
+            arboles.append(Arbol(x, y, imagen, grupo))
+        
+    return arboles
+
+def actualizar_arboles(personaje, grupo, imagen):
+    pcx = int(personaje.rect.centerx // CHUNK_SIZE)
+    pcy = int(personaje.rect.centery // CHUNK_SIZE)
+    
+    for cx in range(pcx - RADIO_CHUNKS, pcx + RADIO_CHUNKS + 1):
+        for cy in range(pcy - RADIO_CHUNKS, pcy + RADIO_CHUNKS + 1):
+            if (cx, cy) not in chunks_arboles:
+                chunks_arboles[(cx, cy)] = generar_chunk_arboles(cx, cy, grupo, imagen)
                 
-        return arboles
+def arboles_cercanos(entidad):
+    ecx = int(entidad.rect.centerx // CHUNK_SIZE)
+    ecy = int(entidad.rect.centery // CHUNK_SIZE)
+    cercanos = []
+    for cx in range(ecx - 1, ecx + 2):
+        for cy in range(ecy - 1, ecy + 2):
+            cercanos.extend(chunks_arboles.get((cx, cy), []))
+    
+    return cercanos
+
+def colision_arboles(entidad):
+    for arbol in arboles_cercanos(entidad):
+        if entidad.hitbox.colliderect(arbol.hitbox):
+            colision_solida(entidad, arbol)
         
 class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara
     def __init__(self, ruta_fondo=None):
