@@ -64,7 +64,10 @@ def colision_arboles(entidad):
     for arbol in arboles_cercanos(entidad):
         if entidad.hitbox.colliderect(arbol.hitbox):
             colision_solida(entidad, arbol)
-        
+
+def reiniciar_arboles():
+    chunks_arboles.clear()
+
 class GrupoCamara (pygame.sprite.Group):        #Esta clase agrupa los sprites para redubijado masivo cuando se mueve la camara
     def __init__(self, ruta_fondo=None):
         super().__init__()

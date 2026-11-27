@@ -44,9 +44,10 @@ def menu_principal():
 
 
 def nueva_partida():
-    global camara_grupo, prota, barra_prota, arboles, juego_pausado
+    global camara_grupo, prota, barra_prota, juego_pausado
     
     juego_pausado = False
+    reiniciar_arboles()
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
@@ -83,9 +84,10 @@ def jugar():
             if tecla[pygame.K_DOWN]:
                 prota.moverse(0, prota.velocidad)
 
+            actualizar_arboles(prota, camara_grupo, arbol_img)
+
             spawneo_enemigos(prota, camara_grupo)
             
-            actualizar_arboles(prota, camara_grupo, arbol_img)
             arboles = arboles_cercanos(prota)
             
             for enemigo in enemigos:
