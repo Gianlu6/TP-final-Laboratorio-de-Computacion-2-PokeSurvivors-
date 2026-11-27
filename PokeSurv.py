@@ -104,6 +104,10 @@ def jugar():
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
+            for e in enemigos:
+                if not e.estoy_vivo:
+                    prota.ganar_xp(25)
+
             enemigos[:] = [e for e in enemigos if e.estoy_vivo]
 
             if prota.vida <= 0:

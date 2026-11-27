@@ -10,9 +10,10 @@ class Personaje(SerVivo):
         self.rango = rango
         self.grupo = grupo
 
-        self.image_original = self.image
-        self.image_invertida = pygame.transform.flip(self.image_original, True, False)
-        self.is_derecha = False
+        self.nivel = 1
+        self.xp = 0
+        self.xp_max = 100
+        
         self.rect = self.rect.inflate(-55, -55)
         self.rect.center = (x,y)
 
@@ -34,20 +35,28 @@ class Personaje(SerVivo):
                 dy = (self.y + movimiento.offset_y) - movimiento.y
                 movimiento.moverse(dx, dy)
 
-    def subir_stats(self,incrementador):
-        #Ataque,def,velocidad,rango,recarga,vida_max
-        #Tiempo_recarga vs invulnerabilidad
-        #Rango modifica la colicion y la imagen
-        #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
-        pass
+    def ganar_xp(self, cantidad):
+        self.xp += cantidad
+        if self.xp >= self.xp_max:
+            self.xp -= self.xp_max
+            self.nivel += 1
+            self.vida_max += 20
+            for movimiento in self.inventario:
+                movimiento.ataque_base += 5
 
-    #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
-    def update(self):
-        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
-            self.image = self.image_original
-            self.tiempo_danio = 0
-            if self.is_derecha:
-                self.image = self.image_original
-            else:
-                self.image = self.image_invertida
-    
+    def mostrar_numeros_impacto(self, superficie, offset):
+        barra_ancho = 50
+        barra_alto = 6
+
+        barra_x = self.rect.centerx - (barra_ancho // 2) - offset.x
+        barra_y = self.rect.top - 25 - offset.y
+
+        ratio = self.xp / self.xp_max
+        ancho_actual = int(barra_ancho * ratio)
+
+        bg_barra = pygame.Rect(barra_x, barra_y, barra_ancho, barra_alto)
+        xp_barra = pygame.Rect(barra_x, barra_y, ancho_actual, barra_alto)
+
+        pygame.draw.rect(superficie, NEGRO, bg_barra)
+        pygame.draw.rect(superficie, AMARILLO, xp_barra)
+        mostrar_texto(f"Nv.{self.nivel}", FUENTE_DANIO, BLANCO, barra_x, barra_y - 20)
