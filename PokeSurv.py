@@ -18,8 +18,10 @@ menu_start = pygame.image.load("sprites/menu_start.png").convert_alpha()
 menu_quit = pygame.image.load("sprites/menu_quit.png").convert_alpha()
 
 #crear botones
-boton_start = Boton(450, 260, menu_start, 5)
-boton_quit = Boton(365, 60, menu_quit, 5)
+boton_start = Boton(425, 260, menu_start, 5)
+boton_quit = Boton(425, 360, menu_quit, 5)
+
+arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 
 def menu_principal():
     while True:
@@ -50,8 +52,7 @@ def nueva_partida():
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
                       prota_sprite, camara_grupo, 1, VELOCIDAD_PERSONAJE)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
-    arboles = generar_arboles(camara_grupo, 50, 3000, 3000, "recursos/Oak_Tree.png")
-        
+            
 def jugar():
     global juego_pausado
     Inicio_De_Tanda = pygame.time.get_ticks()
@@ -85,15 +86,18 @@ def jugar():
                 prota.moverse(0, prota.velocidad)
 
             spawneo_enemigos(prota, camara_grupo)
-
+            
+            actualizar_arboles(prota, camara_grupo, arbol_img)
+            arboles = arboles_cercanos(prota)
+            
             for enemigo in enemigos:
                 enemigo.atacar(prota)
                 for arbol in arboles:
                     colision_solida(enemigo, arbol)
-            
+                
             for arbol in arboles:
-                colision_solida(prota, arbol)          
-
+                colision_solida(prota, arbol) 
+            
             prota.atacar(enemigos)
             prota.actualizar_posicion_armas()
             camara_grupo.update()
