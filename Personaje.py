@@ -19,8 +19,6 @@ class Personaje(SerVivo):
                          Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
                          Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
 
-        #self.inventario = []
-
 
     def atacar(self, ene):
         for movimiento in self.inventario:
@@ -32,3 +30,10 @@ class Personaje(SerVivo):
                 dx = (self.x + movimiento.offset_x) - movimiento.x
                 dy = (self.y + movimiento.offset_y) - movimiento.y
                 movimiento.moverse(dx, dy)
+
+    def subir_stats(self,incrementador):
+        #Ataque,def,velocidad,rango,recarga,vida_max
+        #Tiempo_recarga vs invulnerabilidad
+        #Rango modifica la colicion y la imagen
+        #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
+        pass
