@@ -18,8 +18,8 @@ menu_start = pygame.image.load("sprites/menu_start.png").convert_alpha()
 menu_quit = pygame.image.load("sprites/menu_quit.png").convert_alpha()
 
 #crear botones
-boton_start = Boton(450, 260, menu_start, 5)
-boton_quit = Boton(365, 60, menu_quit, 5)
+boton_start = Boton(425, 260, menu_start, 5)
+boton_quit = Boton(425, 360, menu_quit, 5)
 
 def menu_principal():
     while True:
