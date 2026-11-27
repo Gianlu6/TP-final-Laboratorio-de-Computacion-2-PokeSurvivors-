@@ -93,6 +93,7 @@ class Rayo (Movimiento):             #Impacto de rayos a enemigos random
         self.rayo_image = sprite
         self.rango = 600        #Alcance de 700 pixeles o casi toda la pantalla (excluye afuera de ella)
         self.timepo_rayo = 0
+        self.z = 2
 
     def atacar(self, autor, objetivos):
         self.t_ahora = pygame.time.get_ticks()

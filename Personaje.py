@@ -23,10 +23,8 @@ class Personaje(SerVivo):
                          Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
                          Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
 
-        #self.inventario = []
 
-
-    def atacar(self, ene):
+    def atacar(self):
         for movimiento in self.inventario:
             movimiento.atacar(self,enemigos)
 

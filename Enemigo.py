@@ -5,6 +5,9 @@ from constantes import *
 from sprites import *
 import random
 
+ultimo_spawn = 0
+enemigos = []
+Inicio_De_Tanda = 0
 
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
@@ -56,30 +59,39 @@ class Enemigo(SerVivo):
             texto_offset_x = self.x - offset.x - (self.image.get_width()//2)
             texto_offset_y = self.y - offset.y + 10        
             mostrar_texto(f"{self.vida}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
-                    
 
-ultimo_spawn = 0
-enemigos = []
+
+
+def actualizar_tanda_enemigos():
+    pass
 
 def spawneo_enemigos(personaje, grupo):
     global ultimo_spawn
-    ahora = pygame.time.get_ticks()
-    
-    x = random.choice([0, WIDTH])
-    y = random.randint(0, HEIGHT)   
-    
-    if len (enemigos) < 15 and ahora - ultimo_spawn >= 1000:
-        ultimo_spawn = ahora
+    global Inicio_De_Tanda
+    tiempo_de_Tanda = pygame.time.get_ticks()
+    if tiempo_de_Tanda - Inicio_De_Tanda > 60000:    #¿Paso un minuto?    
+        actualizar_tanda_enemigos()
+        Inicio_De_Tanda = tiempo_de_Tanda
+    else:
+        ahora = pygame.time.get_ticks()
         
-        angulo = random.uniform(0, 2 * math.pi)
-        distancia = max(WIDTH, HEIGHT) / 2 + 100
-        
-        x = personaje.rect.centerx + math.cos(angulo) * distancia
-        y = personaje.rect.centery + math.sin(angulo) * distancia 
-        
-        enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
+        if len (enemigos) < 15 and ahora - ultimo_spawn >= 1000:
+            ultimo_spawn = ahora
 
-    for enemigo in enemigos:
-        enemigo.avanzar(personaje)
-        colision_empuje(enemigo,personaje)
-    colision_todos(enemigos)
+            #Spawn en un radio alrededor del personaje
+            radio_minimo = (WIDTH//2)+50    #Menos de 50 pixeles del personaje no spawnean
+            radio_maximo = (WIDTH//2)+250   #Mas de 250 pixeles del persojane no spawnean
+            angulo= random.uniform(0, 360)  
+            dist = random.uniform(radio_minimo,radio_maximo)
+
+            # Vector con angulo y distancia random
+            desplazamiento_spawn = pygame.math.Vector2(0,-1).rotate(angulo)*dist
+            x = int(personaje.x + desplazamiento_spawn.x)       #Podes acceder a la pocicion de un vector llamando ".x", ".y"
+            y = int(personaje.y + desplazamiento_spawn.y)   
+            
+            enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
+
+        for enemigo in enemigos:
+            enemigo.avanzar(personaje)
+            colision_empuje(enemigo,personaje)
+        colision_todos(enemigos)

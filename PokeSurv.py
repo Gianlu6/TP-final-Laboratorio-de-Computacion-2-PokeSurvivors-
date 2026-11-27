@@ -44,9 +44,10 @@ def menu_principal():
 
 
 def nueva_partida():
-    global camara_grupo, prota, barra_prota, arboles, juego_pausado
+    global camara_grupo, prota, barra_prota, juego_pausado
     
     juego_pausado = False
+    reiniciar_arboles()
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
@@ -55,7 +56,7 @@ def nueva_partida():
             
 def jugar():
     global juego_pausado
-
+    Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,16 +77,19 @@ def jugar():
             tecla = pygame.key.get_pressed()
             if tecla[pygame.K_LEFT]:
                 prota.moverse(-prota.velocidad, 0)
+                prota.is_derecha = True
             if tecla[pygame.K_RIGHT]:
                 prota.moverse(prota.velocidad, 0)
+                prota.is_derecha = False
             if tecla[pygame.K_UP]:
                 prota.moverse(0, -prota.velocidad)
             if tecla[pygame.K_DOWN]:
                 prota.moverse(0, prota.velocidad)
 
+            actualizar_arboles(prota, camara_grupo, arbol_img)
+
             spawneo_enemigos(prota, camara_grupo)
             
-            actualizar_arboles(prota, camara_grupo, arbol_img)
             arboles = arboles_cercanos(prota)
             
             for enemigo in enemigos:
@@ -96,7 +100,7 @@ def jugar():
             for arbol in arboles:
                 colision_solida(prota, arbol) 
             
-            prota.atacar(enemigos)
+            prota.atacar()
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
