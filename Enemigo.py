@@ -67,7 +67,9 @@ def spawneo_enemigos(personaje, grupo):
     global Inicio_De_Tanda
     tiempo_de_Tanda = pygame.time.get_ticks()
     if tiempo_de_Tanda - Inicio_De_Tanda > 60000:    #¿Paso un minuto?    
-        print("Yas paso un minuto")
+
+
+        
         Inicio_De_Tanda = tiempo_de_Tanda
     else:
         ahora = pygame.time.get_ticks()
@@ -76,7 +78,7 @@ def spawneo_enemigos(personaje, grupo):
             ultimo_spawn = ahora
 
             #Spawn en un radio alrededor del personaje
-            radio_minimo = (WIDTH//2)    #Menos de 50 pixeles del personaje no spawnean
+            radio_minimo = (WIDTH//2)+50    #Menos de 50 pixeles del personaje no spawnean
             radio_maximo = (WIDTH//2)+250   #Mas de 250 pixeles del persojane no spawnean
             angulo= random.uniform(0, 360)  
             dist = random.uniform(radio_minimo,radio_maximo)

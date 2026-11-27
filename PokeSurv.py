@@ -54,7 +54,7 @@ def nueva_partida():
         
 def jugar():
     global juego_pausado
-
+    Inicio_De_Tanda = pygame.time.get_ticks()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

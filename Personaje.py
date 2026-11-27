@@ -41,8 +41,13 @@ class Personaje(SerVivo):
         #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
         pass
 
-    def update(self):               #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
+    #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
+    def update(self):
+        if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
+            self.image = self.image_original
+            self.tiempo_danio = 0
         if self.is_derecha:
             self.image = self.image_original
         else:
             self.image = self.image_invertida
+    
