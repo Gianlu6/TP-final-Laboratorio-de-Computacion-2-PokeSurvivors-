@@ -100,7 +100,7 @@ def jugar():
             for arbol in arboles:
                 colision_solida(prota, arbol) 
             
-            prota.atacar(enemigos)
+            prota.atacar()
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
