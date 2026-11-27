@@ -75,8 +75,10 @@ def jugar():
             tecla = pygame.key.get_pressed()
             if tecla[pygame.K_LEFT]:
                 prota.moverse(-prota.velocidad, 0)
+                prota.is_derecha = True
             if tecla[pygame.K_RIGHT]:
                 prota.moverse(prota.velocidad, 0)
+                prota.is_derecha = False
             if tecla[pygame.K_UP]:
                 prota.moverse(0, -prota.velocidad)
             if tecla[pygame.K_DOWN]:

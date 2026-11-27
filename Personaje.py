@@ -9,7 +9,10 @@ class Personaje(SerVivo):
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
         self.rango = rango
         self.grupo = grupo
-        
+
+        self.image_original = self.image
+        self.image_invertida = pygame.transform.flip(self.image_original, True, False)
+        self.is_derecha = False
         self.rect = self.rect.inflate(-55, -55)
         self.rect.center = (x,y)
 
@@ -37,3 +40,9 @@ class Personaje(SerVivo):
         #Rango modifica la colicion y la imagen
         #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
         pass
+
+    def update(self):               #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
+        if self.is_derecha:
+            self.image = self.image_original
+        else:
+            self.image = self.image_invertida
