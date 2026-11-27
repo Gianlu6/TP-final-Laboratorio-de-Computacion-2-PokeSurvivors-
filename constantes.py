@@ -1,9 +1,8 @@
 #Resolución
-import pygame
+import pygame, sys
 import math
 import random
 from itertools import combinations
-
 
 pygame.font.init()
 
@@ -32,7 +31,29 @@ def mostrar_texto(texto, fuente, color, x, y):
     img = fuente.render(texto, True, color)
     VENTANA.blit(img, (x, y))
     
-def separar(entidad_a, entidad_b):   
+def colision_solida(entidad_a, obj_solido):
+    caja = obj_solido.hitbox
+    if not entidad_a.rect.colliderect(caja):
+        return
+
+    overlap_x = min(entidad_a.rect.right, caja.right) - max(entidad_a.rect.left, caja.left)
+    overlap_y = min(entidad_a.rect.bottom, caja.bottom) - max(entidad_a.rect.top, caja.top)
+
+    # se corrige el eje donde el solapamiento es menor
+    if overlap_x < overlap_y:
+        if entidad_a.rect.centerx < caja.centerx:
+            entidad_a.x -= overlap_x
+        else:
+            entidad_a.x += overlap_x
+    else:
+        if entidad_a.rect.centery < caja.centery:
+            entidad_a.y -= overlap_y
+        else:
+            entidad_a.y += overlap_y
+
+    entidad_a.rect.center = (entidad_a.x, entidad_a.y)
+     
+def colision_empuje(entidad_a, entidad_b):   
     if not entidad_a.rect.colliderect(entidad_b.rect):
         return #si no hay colision no hace nada
     #donde se superpone cada eje
@@ -65,9 +86,9 @@ def separar(entidad_a, entidad_b):
 
     
 #con combinations, creas todas las combinaciones posibles de dos unidades y llamas separar con cada una
-def separar_todos(entidades):
+def colision_todos(entidades):
     for a, b in combinations(entidades, 2):
-        separar(a, b)
+        colision_empuje(a, b)
 
 #Distancia entre dos posiciones. Recibe dos tuplas de poscicion x,y y devuelve distancia 
 def distancia_entre_puntos(a,b):

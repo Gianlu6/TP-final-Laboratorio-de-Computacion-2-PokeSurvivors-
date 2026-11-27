@@ -66,11 +66,11 @@ def spawneo_enemigos(personaje, grupo):
     ahora = pygame.time.get_ticks()
     x = random.choice([0, WIDTH])
     y = random.randint(0, HEIGHT)   
-    if len (enemigos) < 8 and ahora - ultimo_spawn >= 1000:
+    if len (enemigos) < 15 and ahora - ultimo_spawn >= 1000:
         ultimo_spawn = ahora
         enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
 
     for enemigo in enemigos:
         enemigo.avanzar(personaje)
-        separar(enemigo,personaje)
-    separar_todos(enemigos)
+        colision_empuje(enemigo,personaje)
+    colision_todos(enemigos)
