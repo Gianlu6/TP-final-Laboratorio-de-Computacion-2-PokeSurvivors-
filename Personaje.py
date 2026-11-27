@@ -46,8 +46,8 @@ class Personaje(SerVivo):
         if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
             self.image = self.image_original
             self.tiempo_danio = 0
-        if self.is_derecha:
-            self.image = self.image_original
-        else:
-            self.image = self.image_invertida
+            if self.is_derecha:
+                self.image = self.image_original
+            else:
+                self.image = self.image_invertida
     
