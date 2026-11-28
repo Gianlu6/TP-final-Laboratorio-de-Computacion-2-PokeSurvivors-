@@ -4,9 +4,9 @@ from constantes import *
 from Clases_Abs import *
 
 CHUNK_SIZE = 600
-ARBOLES_POR_CHUNK = 5
+ARBOLES_POR_CHUNK = 3
 RADIO_CHUNKS = 2
-SEPARACION = 80
+SEPARACION = 200
 
 chunks_arboles = {}
 

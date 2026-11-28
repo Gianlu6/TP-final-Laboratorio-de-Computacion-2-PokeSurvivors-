@@ -55,7 +55,7 @@ def hilo_oleada(cola_datos, evento_terminacion):
         if nueva_tanda:     #Si hay algo en la lista nueva_tanda
             cola_datos.put(nueva_tanda)
 
-        for i in range(120):        #Este seria el delay de 1 minuto por oleada
+        for i in range(120):        #Este seria el "delay de 1 minuto" por oleada
             if evento_terminacion.is_set():
                 return
             time.sleep(0.5)

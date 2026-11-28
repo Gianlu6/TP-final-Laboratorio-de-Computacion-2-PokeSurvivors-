@@ -16,8 +16,16 @@ class Enemigo(SerVivo):
         self.ultimo_chequeo = 0
         self.objetivo = (x, y)
         self.vida = vida_max        #Esto fue privatizado y convertido con @property en la clase SerVivo
-        
-        
+
+        #Forzar la forma de la hitbox acorde a la imagen sprite recibido 
+        #Como la colicion esta basada en el atributo self.rect este solo acepta formas rectangulares
+        #Basadas en la resolucion total de la imagen, sin tener en cuenta su transparencia
+        self.mask = pygame.mask.from_surface(self.image)    #Extraigo el alfa
+        self.rect_lista = self.mask.get_bounding_rects()    #Transformo el alfa en cuadraditos chiquitos
+        if self.rect_lista: #Si no esta vacio...
+            self.rect = self.rect_lista[0].unionall(self.rect_lista[1:])    #Le asigno a self.rect esos rectangulos chicos unificados
+            self.rect.center = (x,y)    
+
     def atacar(self,objetivo):
         if self.rect.colliderect(objetivo.rect):
             objetivo.quitar_vida(self.ataque)
@@ -87,7 +95,7 @@ def spawneo_enemigos(personaje, grupo, especies_activas):
             y = int(personaje.y + desplazamiento_spawn.y)   
 
             especie_elegida = random.choice(especies_activas)       #Random choise elige elemento al azar de un iterable
-            enemigos.append(Enemigo(especie_elegida['vida'], especie_elegida['ataque'], especie_elegida['defensa'], 'normal', x, y, especie_elegida['sprite'], grupo))
+            enemigos.append(Enemigo(especie_elegida['vida'], especie_elegida['ataque'], especie_elegida['defensa'], 'normal', x, y, especie_elegida['sprite_final'], grupo))
 
         for enemigo in enemigos:
             enemigo.avanzar(personaje)

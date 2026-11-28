@@ -81,9 +81,11 @@ def jugar():
                 pygame.quit()
                 sys.exit()
 
+
+            # Espera teclas para pausar con barra espaciadora
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 juego_pausado = not juego_pausado
-
+            
             if juego_pausado and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if boton_start.rect.collidepoint(event.pos):
                     juego_pausado = False
@@ -92,6 +94,7 @@ def jugar():
                     sys.exit()
 
         if not juego_pausado:
+            #Espera de las teclas para moverse
             tecla = pygame.key.get_pressed()
             if tecla[pygame.K_LEFT]:
                 prota.moverse(-prota.velocidad, 0)
@@ -106,18 +109,22 @@ def jugar():
 
             actualizar_arboles(prota, camara_grupo, arbol_img)
 
+
             #Cambio de oleada
             try:
-                oleada_recibida = cola_main.get_nowait()
+                oleada_recibida = cola_main.get_nowait()        #Parecido al comando .get() pero en vez de bloquearse cuando esta vacia lanza una exepcion (PROBAR QUE PASA CON GET SOLO)
                 for pokemon in oleada_recibida:
                     if "sprite_final" not in pokemon:
-                        pokemon["sprite"] = pokemon["sprite"].convert_alpha()
+
+                        pokemon["sprite_final"] = pokemon["sprite"].convert_alpha()   #Recien aca se recorta la imagen porque era una operacion Thread-safe 
+
                         #Normalizador de escalas para que la diferencia de tamaños entre pokemones no sea zarpada. 
                         # 30 (escala Prota) por la altura en cm (La api la guarda en dm) y un "exponente de comprecion" o raiz que 
-                        # achique los valores grandes y agrande los chicos
-                        escala_normalizada = 30*((pokemon['altura']*10)**0.35)      
-                        pokemon["sprite"]= pygame.transform.scale(pokemon["sprite"], (escala_normalizada, escala_normalizada))
-                spawn_activo = oleada_recibida
+                        # achique los valores grandes y agrande los chicos. Cuanto mas chico sea el valor menos diferencia de escala va a ver
+                    
+                        escala_normalizada = 30*((pokemon['altura']*10)**0.25)      
+                        pokemon["sprite_final"]= pygame.transform.scale(pokemon["sprite"], (escala_normalizada, escala_normalizada))
+                spawn_activo = oleada_recibida          #Los datos depositados en oleada_recibida pasan a la lista que usa el spawn constantemente
     
             except queue.Empty:
                 

@@ -10,19 +10,23 @@ class Personaje(SerVivo):
         self.rango = rango
         self.grupo = grupo
 
+        #Guardo el sprite normal e invertido horizontalmente para la direccion de mirada
         self.image_original = self.image
         self.image_invertida = pygame.transform.flip(self.image_original, True, False)
         self.is_derecha = False
+
+        #Ajuste de la hitbox
         self.rect = self.rect.inflate(-55, -55)
         self.rect.center = (x,y)
 
         #Instancia de los ataques
-        self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
-                         Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
-                         Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
-                         Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
+        # self.inventario = [ElectroTela(self.x, self.y, electroTela_sprite, grupo, self.ataque,500,self.rango),
+        #                  Placaje(self.x, self.y, pygame.Surface((0,0)), grupo, self.ataque,500,0),
+        #                  Rayo(x,y,rayoATQ_sprite,grupo,self.ataque*0.2,500,1), 
+        #                  Chispitas(self.x, self.y,rayito_sprite,self.grupo,self.ataque,500,600,self.velocidad)]
+        self.inventario = []
 
-
+    #Cuando personaje ataca itera los ataques que tiene y llama el metodo atacar
     def atacar(self):
         for movimiento in self.inventario:
             movimiento.atacar(self,enemigos)
@@ -41,7 +45,7 @@ class Personaje(SerVivo):
         #A pj y armas (las armas tienen modificadores en el ataque y velocidad base del personaje)
         pass
 
-    #Por temas de prioridad y orden cronologico de dibujado uso el update para forzar la modificacion de la direccion de la imagen
+    #Por temas de prioridad y orden cronologico de dibujado uso del update para forzar la modificacion de la direccion de la imagen
     def update(self):
         if pygame.time.get_ticks() - self.tiempo_danio >= self.invulnerabilidad:
             self.image = self.image_original

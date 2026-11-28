@@ -6,7 +6,7 @@ from itertools import combinations
 
 pygame.font.init()
 
-WIDTH, HEIGHT = 1080, 720    
+WIDTH, HEIGHT = 1080, 720    #Resolucion de ventana
 VELOCIDAD_PERSONAJE = 3.50
 
 
