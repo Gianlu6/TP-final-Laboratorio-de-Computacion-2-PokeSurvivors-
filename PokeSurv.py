@@ -31,11 +31,12 @@ cola_main = queue.Queue()                   #Cola donde se dejan las url y se ex
 evento_terminador = threading.Event()       #Evento para finalizar el hilo daemon
 
 #Spawn de 5 por defecto para que no este vacio al principio (Criterio de eleccion: los mas debiles y con ventaja para Pikachu)
-spawn_activo = [{'nombre': 'magikarp', 'ataque': 10, 'defensa': 55, 'vida': 20, 'velocidad': 80, 'tipo': ['water'], 'altura': 9, 'sprite_url': 'recursos\magikarp.png'}, 
-                {'nombre': 'horsea', 'ataque': 40, 'defensa': 70, 'vida': 30, 'velocidad': 60, 'tipo': ['water'], 'altura': 4, 'sprite_url': 'recursos\horsea.png'}, 
-                {'nombre': 'tentacool', 'ataque': 40, 'defensa': 35, 'vida': 40, 'velocidad': 70, 'tipo': ['water', 'poison'], 'altura': 9, 'sprite_url': 'recursos\tentacool.png'}, 
-                {'nombre': 'pidgey', 'ataque': 45, 'defensa': 40, 'vida': 40, 'velocidad': 56, 'tipo': ['normal', 'flying'], 'altura': 3, 'sprite_url': 'recursos\pidgey.png'}, 
-                {'nombre': 'zubat', 'ataque': 45, 'defensa': 35, 'vida': 40, 'velocidad': 55, 'tipo': ['poison', 'flying'], 'altura': 8, 'sprite_url': 'recursos\zubat.png'}]
+spawn_inicial = [{'nombre': 'magikarp', 'ataque': 10, 'defensa': 55, 'vida': 20, 'velocidad': 80, 'tipo': ['water'], 'altura': 9, 'sprite_url': 'recursos/magikarp.png'}, 
+                {'nombre': 'horsea', 'ataque': 40, 'defensa': 70, 'vida': 30, 'velocidad': 60, 'tipo': ['water'], 'altura': 4, 'sprite_url': 'recursos/horsea.png'}, 
+                {'nombre': 'tentacool', 'ataque': 40, 'defensa': 35, 'vida': 40, 'velocidad': 70, 'tipo': ['water', 'poison'], 'altura': 9, 'sprite_url': 'recursos/tentacool.png'}, 
+                {'nombre': 'pidgey', 'ataque': 45, 'defensa': 40, 'vida': 40, 'velocidad': 56, 'tipo': ['normal', 'flying'], 'altura': 3, 'sprite_url': 'recursos/pidgey.png'}, 
+                {'nombre': 'zubat', 'ataque': 45, 'defensa': 35, 'vida': 40, 'velocidad': 55, 'tipo': ['poison', 'flying'], 'altura': 8, 'sprite_url': 'recursos/zubat.png'}]
+spawn_activo = []
 
 def menu_principal():
     while True:
@@ -78,12 +79,13 @@ def jugar():
     pokemones_actuales = []
     ejecutando = True
 
-    #Cargar sprites de los iniciales:
+    #Cargar los pokemones iniciales:
+    spawn_activo[:] = [p.copy() for p in spawn_inicial]
     for pokemon in spawn_activo:
-        if "sprite_final" not in spawn_activo:
-            pokemon["sprite_final"] = pygame.image.load(pokemon["sprite_url"]).convert_alpha() 
-            normalizar_escala = 30*((pokemon['altura']*10)**0.25)      
-            pokemon["sprite_final"]= pygame.transform.scale(pokemon["sprite_final"], (normalizar_escala, normalizar_escala))
+        if "sprite_final" not in pokemon:
+            img_cruda = pygame.image.load(pokemon["sprite_url"]).convert_alpha() 
+            normalizar_escala = 30*((pokemon['altura']*10)**COEFICIENTE_ESCALA)      
+            pokemon["sprite_final"]= pygame.transform.scale(img_cruda, (normalizar_escala, normalizar_escala))
     
     while True:
         for event in pygame.event.get():
@@ -136,7 +138,7 @@ def jugar():
                         # 30 (escala Prota) por la altura en cm (La api la guarda en dm) y un "exponente de comprecion" o raiz que 
                         # achique los valores grandes y agrande los chicos. Cuanto mas chico sea el valor menos diferencia de escala va a ver
                     
-                        escala_normalizada = 30*((pokemon['altura']*10)**0.25)      
+                        escala_normalizada = 30*((pokemon['altura']*10)**COEFICIENTE_ESCALA)      
                         pokemon["sprite_final"]= pygame.transform.scale(pokemon["sprite"], (escala_normalizada, escala_normalizada))
                 spawn_activo = oleada_recibida          #Los datos depositados en oleada_recibida pasan a la lista que usa el spawn constantemente
     

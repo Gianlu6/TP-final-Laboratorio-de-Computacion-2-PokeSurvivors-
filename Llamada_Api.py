@@ -69,12 +69,8 @@ def hilo_oleada(cola_datos, evento_terminacion):
             cola_datos.put(nueva_tanda)
 
 
+        if evento_terminacion.wait(timeout=60):  #Este seria el "delay de 1 minuto" por oleada
+            return
+        # El .wait() duerme el proceso durante 60 segundos a menos que el evento_terminacion sea disparado
+        # En ese caso retorna automaticamente para cerrar el hilo
 
-        for i in range(120):        #Este seria el "delay de 1 minuto" por oleada
-            if evento_terminacion.is_set():
-                return
-            time.sleep(0.5)
-
-
-def cargador_de_sptites(url):
-    pass

@@ -25,7 +25,7 @@ FUENTE_POKEMON1 = pygame.font.Font("recursos\Pokemon Hollow.ttf",30)
 FUENTE_POKEMON2 = pygame.font.Font("recursos\Pokemon Solid.ttf",30)
 FUENTE_DANIO = pygame.font.Font("recursos\Pokemon Solid.ttf",16)    #La misma poke fuente pero mas chica
 
-
+COEFICIENTE_ESCALA = 0.3
 
 def mostrar_texto(texto, fuente, color, x, y):
     img = fuente.render(texto, True, color)
