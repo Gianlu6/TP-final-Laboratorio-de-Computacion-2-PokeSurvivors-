@@ -59,6 +59,8 @@ def nueva_partida():
 def jugar():
     global juego_pausado, contador_muertes
 
+    global juego_pausado
+    Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,8 +81,10 @@ def jugar():
             tecla = pygame.key.get_pressed()
             if tecla[pygame.K_LEFT]:
                 prota.moverse(-prota.velocidad, 0)
+                prota.is_derecha = True
             if tecla[pygame.K_RIGHT]:
                 prota.moverse(prota.velocidad, 0)
+                prota.is_derecha = False
             if tecla[pygame.K_UP]:
                 prota.moverse(0, -prota.velocidad)
             if tecla[pygame.K_DOWN]:
@@ -104,6 +108,11 @@ def jugar():
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
+            for e in enemigos:
+                if not e.estoy_vivo:
+                    prota.ganar_xp(25)
+
+            enemigos[:] = [e for e in enemigos if e.estoy_vivo]
             for enemigo in enemigos:
                 if enemigo.vida <= 0:
                     contador_muertes += 1

@@ -42,7 +42,10 @@ class SerVivo(Entidad):
 
     #Property es un decorador intergrado que convierte un metodo getter de un atributo privado
     #en un atributo de solo lectura (o un método sin paréntesis con el mismo nombre que el atributo privado)
-
+    @property
+    def invulnerabilidad(self):
+        return self.__invulnerabilidad
+    
     @property
     def ataque(self):
         return self.__ataque
