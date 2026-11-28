@@ -48,6 +48,7 @@ def nueva_partida():
     
     juego_pausado = False
     reiniciar_arboles()
+    reiniciar_tandas()
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
@@ -106,7 +107,7 @@ def jugar():
 
             for e in enemigos:
                 if not e.estoy_vivo:
-                    prota.ganar_xp(25)
+                    prota.ganar_xp(10)
 
             enemigos[:] = [e for e in enemigos if e.estoy_vivo]
 

@@ -40,9 +40,10 @@ class Personaje(SerVivo):
         if self.xp >= self.xp_max:
             self.xp -= self.xp_max
             self.nivel += 1
-            self.vida_max += 20
+            self.xp_max = int(self.xp_max * 1.2)
+            self.vida_max += 5
             for movimiento in self.inventario:
-                movimiento.ataque_base += 5
+                movimiento.ataque_base += 2
 
     def mostrar_numeros_impacto(self, superficie, offset):
         barra_ancho = 50

@@ -8,6 +8,8 @@ import random
 ultimo_spawn = 0
 enemigos = []
 Inicio_De_Tanda = 0
+vida_enemigo = 100
+ataque_enemigo = 10
 
 class Enemigo(SerVivo):
     def __init__(self, vida_max, ataque, defensa, tipo, x, y, image, grupo, velocidad=2):
@@ -20,7 +22,7 @@ class Enemigo(SerVivo):
         
     def atacar(self,objetivo):
         if self.rect.colliderect(objetivo.rect):
-            objetivo.quitar_vida(10)
+            objetivo.quitar_vida(self.ataque)
 
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()
@@ -63,7 +65,15 @@ class Enemigo(SerVivo):
 
 
 def actualizar_tanda_enemigos():
-    pass
+    global vida_enemigo, ataque_enemigo
+    vida_enemigo += 25
+    ataque_enemigo += 5
+
+def reiniciar_tandas():
+    global Inicio_De_Tanda, vida_enemigo, ataque_enemigo
+    Inicio_De_Tanda = pygame.time.get_ticks()
+    vida_enemigo = 100
+    ataque_enemigo = 10
 
 def spawneo_enemigos(personaje, grupo):
     global ultimo_spawn
@@ -89,7 +99,7 @@ def spawneo_enemigos(personaje, grupo):
             x = int(personaje.x + desplazamiento_spawn.x)       #Podes acceder a la pocicion de un vector llamando ".x", ".y"
             y = int(personaje.y + desplazamiento_spawn.y)   
             
-            enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
+            enemigos.append(Enemigo(vida_enemigo, ataque_enemigo, 50, 'normal', x, y, malo_sprite, grupo))
 
         for enemigo in enemigos:
             enemigo.avanzar(personaje)
