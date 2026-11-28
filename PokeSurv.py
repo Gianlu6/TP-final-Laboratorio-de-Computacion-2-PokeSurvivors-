@@ -27,7 +27,7 @@ boton_quit = Boton(425, 360, menu_quit, 5)
 arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 
 #Creacion de variables para usar hilos
-cola_main = queue.Queue()                   #Cola donde se dejan las url y se extraen los datos obtenidos
+cola_main = queue.Queue()                   #Cola donde se dejan los datos de la API y el bucle principal los extrae
 evento_terminador = threading.Event()       #Evento para finalizar el hilo daemon
 
 #Spawn de 5 por defecto para que no este vacio al principio (Criterio de eleccion: los mas debiles y con ventaja para Pikachu)
@@ -127,7 +127,7 @@ def jugar():
 
 
             #Cambio de oleada
-            try:
+            try:                                                #A menos que la cola este vacia, constantemente esta esperando los datos
                 oleada_recibida = cola_main.get_nowait()        #Parecido al comando .get() pero en vez de bloquearse cuando esta vacia lanza una exepcion (PROBAR QUE PASA CON GET SOLO)
                 for pokemon in oleada_recibida:
                     if "sprite_final" not in pokemon:

@@ -74,3 +74,4 @@ def hilo_oleada(cola_datos, evento_terminacion):
         # El .wait() duerme el proceso durante 60 segundos a menos que el evento_terminacion sea disparado
         # En ese caso retorna automaticamente para cerrar el hilo
 
+#El hilo secuntario cuyo target es esta funcion, deposita en la cola 5 datos de pokemon y se duerme cada 1 minuto
