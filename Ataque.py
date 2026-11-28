@@ -103,12 +103,12 @@ class Rayo (Movimiento):             #Impacto de rayos a enemigos random
                 if distancia_entre_puntos((autor.x,autor.y),(enemigo.x,enemigo.y))<self.rango:
                     victimas_en_rango.append(enemigo)             #Lista intermedia de enemigos que cumplen con un rango o se ven en pantalla
 
-                if len(victimas_en_rango)!=0:
-                    victima = victimas_en_rango[random.randint(0,len(victimas_en_rango)-1)]
-                    victima.quitar_vida(self.ataque_base)  #Dañar enemigo aleatorio
-                    self.mostrar_rayo(autor.buscar_pos(victima))
-                    self.ultimo_ataque = self.t_ahora
-                    self.timepo_rayo = self.t_ahora
+            if len(victimas_en_rango)!=0:
+                victima = random.choice(victimas_en_rango)
+                victima.quitar_vida(self.ataque_base)  #Dañar enemigo aleatorio
+                self.mostrar_rayo(autor.buscar_pos(victima))
+                self.ultimo_ataque = self.t_ahora
+                self.timepo_rayo = self.t_ahora
         
 
     def mostrar_rayo(self,pos):

@@ -160,10 +160,12 @@ def jugar():
                 colision_solida(prota, arbol) 
             
             prota.atacar()
+            enemigos[:] = [e for e in enemigos if e.estoy_vivo]
+            
             prota.actualizar_posicion_armas()
             camara_grupo.update()
 
-            enemigos[:] = [e for e in enemigos if e.estoy_vivo]
+            
 
             if prota.vida <= 0:
                 return                      # murió: vuelve a main()

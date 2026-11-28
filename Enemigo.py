@@ -74,7 +74,7 @@ def spawneo_enemigos(personaje, grupo, especies_activas):
     global ultimo_spawn
     ahora = pygame.time.get_ticks()
     
-    if len (enemigos) < 30 and ahora - ultimo_spawn >= 1000:
+    if len (enemigos) < 50 and ahora - ultimo_spawn >= 300:
         ultimo_spawn = ahora
 
         #Spawn en un radio alrededor del personaje
