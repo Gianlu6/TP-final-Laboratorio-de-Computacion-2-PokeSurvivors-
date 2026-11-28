@@ -1,5 +1,7 @@
 import pygame       #Se instala con pip install pygame
 import sys          #Para cerrar la ejecucion de codigo si se cierra el juego
+import threading
+import queue
 
 from constantes import *                           #Librerías propias
 from Personaje import Personaje
@@ -9,6 +11,7 @@ from Ataque import *
 from BarraVida import *
 from sprites import *
 from Boton import *
+from Llamada_Api import *
 
 #variables de juego
 juego_pausado = False
@@ -22,6 +25,11 @@ boton_start = Boton(425, 260, menu_start, 5)
 boton_quit = Boton(425, 360, menu_quit, 5)
 
 arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
+
+#Creacion de variables para usar hilos
+cola_main = queue.Queue()
+evento_terminador = threading.Event()
+spawn_activo = []
 
 def menu_principal():
     while True:
@@ -50,16 +58,26 @@ def nueva_partida():
     reiniciar_arboles()
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
-    prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
+    prota = Personaje(1000, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
                       prota_sprite, camara_grupo, 1, VELOCIDAD_PERSONAJE)
     barra_prota = BarraVida(100, 600, 300, 50, prota.vida_max)
             
 def jugar():
     global juego_pausado
+    global spawn_activo
     Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
+    
+    #Se inician los hilos secundarios
+    hilo1 = threading.Thread(target=hilo_oleada,args=(cola_main,evento_terminador),daemon=True)
+    hilo1.start()
+    pokemones_actuales = []
+    ejecutando = True
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                ejecutando = False
+                evento_terminador.set() 
                 pygame.quit()
                 sys.exit()
 
@@ -88,7 +106,25 @@ def jugar():
 
             actualizar_arboles(prota, camara_grupo, arbol_img)
 
-            spawneo_enemigos(prota, camara_grupo)
+            #Cambio de oleada
+            try:
+                oleada_recibida = cola_main.get_nowait()
+                for pokemon in oleada_recibida:
+                    if "sprite_final" not in pokemon:
+                        pokemon["sprite"] = pokemon["sprite"].convert_alpha()
+                        #Normalizador de escalas para que la diferencia de tamaños entre pokemones no sea zarpada. 
+                        # 30 (escala Prota) por la altura en cm (La api la guarda en dm) y un "exponente de comprecion" o raiz que 
+                        # achique los valores grandes y agrande los chicos
+                        escala_normalizada = 30*((pokemon['altura']*10)**0.35)      
+                        pokemon["sprite"]= pygame.transform.scale(pokemon["sprite"], (escala_normalizada, escala_normalizada))
+                spawn_activo = oleada_recibida
+    
+            except queue.Empty:
+                
+                pass    #Ignorar si no hay oleada nueva
+    
+            if spawn_activo:
+                spawneo_enemigos(prota, camara_grupo,spawn_activo)
             
             arboles = arboles_cercanos(prota)
             

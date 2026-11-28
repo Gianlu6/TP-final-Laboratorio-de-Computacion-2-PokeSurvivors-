@@ -20,7 +20,7 @@ class Enemigo(SerVivo):
         
     def atacar(self,objetivo):
         if self.rect.colliderect(objetivo.rect):
-            objetivo.quitar_vida(10)
+            objetivo.quitar_vida(self.ataque)
 
     def avanzar(self, Personaje):
         ahora = pygame.time.get_ticks() #devuelve cuantos segundos pasaron desde pygame.init()
@@ -58,19 +58,16 @@ class Enemigo(SerVivo):
 
             texto_offset_x = self.x - offset.x - (self.image.get_width()//2)
             texto_offset_y = self.y - offset.y + 10        
-            mostrar_texto(f"{self.vida}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
+            mostrar_texto(f"{round(self.vida)}", FUENTE, NEGRO, texto_offset_x,texto_offset_y )            #Muestra texto de la vida
 
 
 
-def actualizar_tanda_enemigos():
-    pass
-
-def spawneo_enemigos(personaje, grupo):
+def spawneo_enemigos(personaje, grupo, especies_activas):
     global ultimo_spawn
     global Inicio_De_Tanda
     tiempo_de_Tanda = pygame.time.get_ticks()
     if tiempo_de_Tanda - Inicio_De_Tanda > 60000:    #¿Paso un minuto?    
-        actualizar_tanda_enemigos()
+        
         Inicio_De_Tanda = tiempo_de_Tanda
     else:
         ahora = pygame.time.get_ticks()
@@ -88,8 +85,9 @@ def spawneo_enemigos(personaje, grupo):
             desplazamiento_spawn = pygame.math.Vector2(0,-1).rotate(angulo)*dist
             x = int(personaje.x + desplazamiento_spawn.x)       #Podes acceder a la pocicion de un vector llamando ".x", ".y"
             y = int(personaje.y + desplazamiento_spawn.y)   
-            
-            enemigos.append(Enemigo(100, 50, 50, 'normal', x, y, malo_sprite, grupo))
+
+            especie_elegida = random.choice(especies_activas)       #Random choise elige elemento al azar de un iterable
+            enemigos.append(Enemigo(especie_elegida['vida'], especie_elegida['ataque'], especie_elegida['defensa'], 'normal', x, y, especie_elegida['sprite'], grupo))
 
         for enemigo in enemigos:
             enemigo.avanzar(personaje)

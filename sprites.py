@@ -1,9 +1,6 @@
 import pygame
-from Llamada_Api import *
 
 #INICIALIZANDO SPRITES
-
-#prota_sprite_load = pygame.image.load(obtenerPikachu()).convert_alpha()        #PROXIMAMENTE: obtencion de datos de la API
 prota_sprite_load = pygame.image.load("sprites/main_pikachu.png").convert_alpha()
 prota_sprite = pygame.transform.scale(prota_sprite_load, (100, 100))
 malo_sprite_load = pygame.image.load("sprites/malo.jpg").convert_alpha()
