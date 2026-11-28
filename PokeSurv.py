@@ -45,10 +45,11 @@ def menu_principal():
         RELOJ.tick(60)
 
 def nueva_partida():
-    global camara_grupo, prota, barra_prota, juego_pausado
+    global camara_grupo, prota, barra_prota, juego_pausado, contador_muertes
     
     juego_pausado = False
     reiniciar_arboles()
+    contador_muertes = 0
     enemigos.clear()
     camara_grupo = GrupoCamara("recursos/pasto.jpg")
     prota = Personaje(100, 55, 40, 'electric', WIDTH//2, HEIGHT//2,
