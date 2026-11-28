@@ -13,9 +13,11 @@ chunks_arboles = {}
 class Arbol(Entidad):
     def __init__(self, x, y, sprite, grupo):
         super().__init__(x,y,sprite,grupo)
+        #Ajuste manual de la hitbox del arbol
         self.rect = self.image.get_rect(midbottom=(x, y))
-        self.hitbox = pygame.Rect(0, 0, 80, 100)
+        self.hitbox = pygame.Rect(0, 0, 30, 25)
         self.hitbox.midbottom = self.rect.midbottom
+        self.hitbox.y -= 55 
 
 def cargar_imagen_arbol(ruta_imagen, escala=3):
     imagen = pygame.image.load(ruta_imagen).convert_alpha()

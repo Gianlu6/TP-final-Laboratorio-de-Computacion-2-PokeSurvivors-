@@ -9,6 +9,8 @@ import pygame
 #Los datos de pokemon descargados en la API se guardan en un diccionario para ahorrar tiempo de carga cuando toca de nuevo el pokemon o se reinicia la partida
 Cache_pokemons = {} 
 
+
+#Funcion que obtiene los datos de la API
 def obtener_pokemon(id):
     id_sorteo = id
     if id_sorteo in Cache_pokemons:     #Si el pokemon que toca ya toco antes se llama al cache para retornar rapido el diccionario

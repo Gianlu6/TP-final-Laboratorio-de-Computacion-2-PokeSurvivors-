@@ -27,8 +27,8 @@ boton_quit = Boton(425, 360, menu_quit, 5)
 arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 
 #Creacion de variables para usar hilos
-cola_main = queue.Queue()
-evento_terminador = threading.Event()
+cola_main = queue.Queue()                   #Cola donde se dejan las url y se extraen los datos obtenidos
+evento_terminador = threading.Event()       #Evento para finalizar el hilo daemon
 spawn_activo = []
 
 def menu_principal():
@@ -65,7 +65,6 @@ def nueva_partida():
 def jugar():
     global juego_pausado
     global spawn_activo
-    Inicio_De_Tanda = pygame.time.get_ticks()       #Tiempo de inicio de juego excluyendo el tiempo en menu
     
     #Se inician los hilos secundarios
     hilo1 = threading.Thread(target=hilo_oleada,args=(cola_main,evento_terminador),daemon=True)
