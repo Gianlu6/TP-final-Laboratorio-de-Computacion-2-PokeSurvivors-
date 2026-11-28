@@ -29,7 +29,13 @@ arbol_img = cargar_imagen_arbol("recursos/Oak_Tree.png")
 #Creacion de variables para usar hilos
 cola_main = queue.Queue()                   #Cola donde se dejan las url y se extraen los datos obtenidos
 evento_terminador = threading.Event()       #Evento para finalizar el hilo daemon
-spawn_activo = []
+
+#Spawn de 5 por defecto para que no este vacio al principio (Criterio de eleccion: los mas debiles y con ventaja para Pikachu)
+spawn_activo = [{'nombre': 'magikarp', 'ataque': 10, 'defensa': 55, 'vida': 20, 'velocidad': 80, 'tipo': ['water'], 'altura': 9, 'sprite_url': 'recursos\magikarp.png'}, 
+                {'nombre': 'horsea', 'ataque': 40, 'defensa': 70, 'vida': 30, 'velocidad': 60, 'tipo': ['water'], 'altura': 4, 'sprite_url': 'recursos\horsea.png'}, 
+                {'nombre': 'tentacool', 'ataque': 40, 'defensa': 35, 'vida': 40, 'velocidad': 70, 'tipo': ['water', 'poison'], 'altura': 9, 'sprite_url': 'recursos\tentacool.png'}, 
+                {'nombre': 'pidgey', 'ataque': 45, 'defensa': 40, 'vida': 40, 'velocidad': 56, 'tipo': ['normal', 'flying'], 'altura': 3, 'sprite_url': 'recursos\pidgey.png'}, 
+                {'nombre': 'zubat', 'ataque': 45, 'defensa': 35, 'vida': 40, 'velocidad': 55, 'tipo': ['poison', 'flying'], 'altura': 8, 'sprite_url': 'recursos\zubat.png'}]
 
 def menu_principal():
     while True:
@@ -66,11 +72,18 @@ def jugar():
     global juego_pausado
     global spawn_activo
     
-    #Se inician los hilos secundarios
+    #Se inician el hilo secundario
     hilo1 = threading.Thread(target=hilo_oleada,args=(cola_main,evento_terminador),daemon=True)
     hilo1.start()
     pokemones_actuales = []
     ejecutando = True
+
+    #Cargar sprites de los iniciales:
+    for pokemon in spawn_activo:
+        if "sprite_final" not in spawn_activo:
+            pokemon["sprite_final"] = pygame.image.load(pokemon["sprite_url"]).convert_alpha() 
+            normalizar_escala = 30*((pokemon['altura']*10)**0.25)      
+            pokemon["sprite_final"]= pygame.transform.scale(pokemon["sprite_final"], (normalizar_escala, normalizar_escala))
     
     while True:
         for event in pygame.event.get():
@@ -84,11 +97,13 @@ def jugar():
             # Espera teclas para pausar con barra espaciadora
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 juego_pausado = not juego_pausado
+
             
             if juego_pausado and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if boton_start.rect.collidepoint(event.pos):
                     juego_pausado = False
                 elif boton_quit.rect.collidepoint(event.pos):
+                    evento_terminador.set() 
                     pygame.quit()
                     sys.exit()
 

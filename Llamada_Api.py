@@ -20,8 +20,14 @@ def obtener_pokemon(id):
         req.raise_for_status()
         dicc = req.json()
 
+        #Extraccion de tipos de la API (tiene muchas vueltas)
+        tipos = []
+        for pos in dicc['types']:
+            tipos.append(pos['type']['name'])   
+
+        #Recopilacion de datos finales
         poke_dato = {'nombre':dicc['name'],'ataque':dicc['stats'][1]['base_stat'],'defensa':dicc['stats'][2]['base_stat'],
-                     'vida':dicc['stats'][0]['base_stat'],'velocidad':dicc['stats'][5]['base_stat'],'tipo':dicc['types'],
+                     'vida':dicc['stats'][0]['base_stat'],'velocidad':dicc['stats'][5]['base_stat'],'tipo':tipos,
                      'altura':dicc['height'], 'sprite_url':dicc['sprites']['front_default']}
 
         #Extraer imagen sprite de la URL y cargarla en memoria
@@ -42,8 +48,13 @@ def obtener_pokemon(id):
         return None
 
 
+#Funcion target del hilo. Administra las llamadas con una queue
 def hilo_oleada(cola_datos, evento_terminacion):
     while not evento_terminacion.is_set():  #Mientras no se dispare el evento de terminacion de hilos
+        
+        if evento_terminacion.is_set():     #Vuelve a preguntar si el juego termino por si en la pausa lo quitaste
+            return
+        
         ids_tanda = [random.randint(1,151) for i in range (5)]      # Sorteo de 5 IDs
         nueva_tanda = []
 
@@ -57,7 +68,13 @@ def hilo_oleada(cola_datos, evento_terminacion):
         if nueva_tanda:     #Si hay algo en la lista nueva_tanda
             cola_datos.put(nueva_tanda)
 
+
+
         for i in range(120):        #Este seria el "delay de 1 minuto" por oleada
             if evento_terminacion.is_set():
                 return
             time.sleep(0.5)
+
+
+def cargador_de_sptites(url):
+    pass

@@ -74,7 +74,7 @@ def spawneo_enemigos(personaje, grupo, especies_activas):
     global ultimo_spawn
     ahora = pygame.time.get_ticks()
     
-    if len (enemigos) < 15 and ahora - ultimo_spawn >= 1000:
+    if len (enemigos) < 30 and ahora - ultimo_spawn >= 1000:
         ultimo_spawn = ahora
 
         #Spawn en un radio alrededor del personaje
@@ -89,7 +89,7 @@ def spawneo_enemigos(personaje, grupo, especies_activas):
         y = int(personaje.y + desplazamiento_spawn.y)   
 
         especie_elegida = random.choice(especies_activas)       #Random choise elige elemento al azar de un iterable
-        enemigos.append(Enemigo(especie_elegida['vida'], especie_elegida['ataque'], especie_elegida['defensa'], 'normal', x, y, especie_elegida['sprite_final'], grupo))
+        enemigos.append(Enemigo(especie_elegida['vida'], especie_elegida['ataque'], especie_elegida['defensa'], especie_elegida['tipo'], x, y, especie_elegida['sprite_final'], grupo))
 
     for enemigo in enemigos:
         enemigo.avanzar(personaje)
